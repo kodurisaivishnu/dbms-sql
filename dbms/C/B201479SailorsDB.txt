@@ -1,0 +1,554 @@
+1. Display names of all sailors.
+
+mysql> select Sname from Sailors;
++---------+
+| Sname   |
++---------+
+| Dustin  |
+| Brutus  |
+| Lubber  |
+| Andy    |
+| Rusty   |
+| Horatio |
+| Zorba   |
+| Horatio |
+| Art     |
+| Bob     |
++---------+
+
+
+2. Display names of all sailors with rating above 7.
+
+mysql> select Sname from Sailors where Rating>7;
++---------+
+| Sname   |
++---------+
+| Lubber  |
+| Andy    |
+| Rusty   |
+| Zorba   |
+| Horatio |
++---------+
+
+3. Display names of the sailors with rating above 7 and age<50
+
+mysql> select Sname from Sailors where Rating>7 and Age<50;
++---------+
+| Sname   |
++---------+
+| Andy    |
+| Rusty   |
+| Zorba   |
+| Horatio |
++---------+
+
+4. Display ids and names of the sailors whose age is between 30 and 50.
+
+mysql> select SID,Sname from Sailors where Age>30 and Age<50;
++-----+---------+
+| SID | Sname   |
++-----+---------+
+|  22 | Dustin  |
+|  29 | Brutus  |
+|  58 | Rusty   |
+|  64 | Horatio |
+|  74 | Horatio |
++-----+---------+
+
+5. Display ids and names of sailors with names starting with 'S'.
+
+mysql> select SID,Sname from Sailors where Sname like 'S%';
+Empty set 
+
+
+6. Display the ids and names of sailors with names starting with 'B' and having length 3.
+
+mysql> select SID,Sname from Sailors where Sname like 'B__';
++-----+-------+
+| SID | Sname |
++-----+-------+
+|  95 | Bob   |
++-----+-------+
+
+7. Display names from sailors in the order of their rating.
+
+mysql> select Sname from Sailors order by Rating;
++---------+
+| Sname   |
++---------+
+| Brutus  |
+| Art     |
+| Bob     |
+| Dustin  |
+| Horatio |
+| Lubber  |
+| Andy    |
+| Horatio |
+| Rusty   |
+| Zorba   |
++---------+
+
+8. Display count of Sailors.
+
+select count(SID) from Sailors;
++------------+
+| count(SID) |
++------------+
+|         10 |
++------------+
+
+9. Display color of the boats.
+
+mysql> select Color from Boats;
++-------+
+| Color |
++-------+
+| Blue  |
+| Red   |
+| Green |
+| Red   |
++-------+
+
+
+10. Display highest rating of Sailors.
+
+mysql> select max(Rating) from Sailors;
++-------------+
+| max(Rating) |
++-------------+
+|          10 |
++-------------+
+
+
+11. Display average age of sailors.
+
+mysql> select avg(Age) from Sailors;
++----------+
+| avg(Age) |
++----------+
+|     37.4 |
++----------+
+
+12. Display the name of the sailor with highest rating.
+
+mysql> select Sname from Sailors where Rating=(select max(Rating) from Sailors);
++-------+
+| Sname |
++-------+
+| Rusty |
+| Zorba |
++-------+
+
+13. Display name and rating of the youngest sailor.
+
+mysql> select Sname,Rating from Sailors where Age=(select min(Age) from Sailors);
++-------+--------+
+| Sname | Rating |
++-------+--------+
+| Zorba |     10 |
++-------+--------+
+
+14. Display names of the sailors who have rating better than that of some sailor called 'Horatio'.
+
+mysql> select Sname from Sailors where Rating>any(select Rating from Sailors where Sname='Horatio');
++---------+
+| Sname   |
++---------+
+| Lubber  |
+| Andy    |
+| Rusty   |
+| Zorba   |
+| Horatio |
++---------+
+
+15. Display names of the sailors who have rating better than that of all sailor called 'Horatio'.
+
+mysql> select Sname from Sailors where Rating>all(select Rating from Sailors where Sname='Horatio');
++-------+
+| Sname |
++-------+
+| Rusty |
+| Zorba |
++-------+
+
+16. Display the names of the oldest sailors who is older than the sailors with rating 10.
+
+mysql> select Sname from Sailors where Age>all(select Age from Sailors where Rating=10);
++---------+
+| Sname   |
++---------+
+| Dustin  |
+| Brutus  |
+| Lubber  |
+| Andy    |
+| Horatio |
+| Horatio |
+| Art     |
+| Bob     |
++---------+
+
+17. Display the count of the boats reserved by each sailor.
+
+mysql> select SID,count(*) from Reserves group by SID;
++-----+----------+
+| SID | count(*) |
++-----+----------+
+|  22 |        4 |
+|  31 |        3 |
+|  64 |        2 |
+|  74 |        1 |
++-----+----------+
+
+
+18. Display count of boats for each color.
+
+mysql> select Color,count(*) from Boats group by Color;
++-------+----------+
+| Color | count(*) |
++-------+----------+
+| Blue  |        1 |
+| Red   |        2 |
+| Green |        1 |
++-------+----------+
+
+
+19. Display the id of the sailors who have reserved max no. of boats.
+
+mysql> select SID from Reserves group by SID order by count(*) desc limit 1;
++-----+
+| SID |
++-----+
+|  22 |
++-----+
+
+mysql> select SID from Reserves group by SID having count(*)=(select max(t.c) from (select count(*) as c from Reserves group by SID) as t);
++-----+
+| SID |
++-----+
+|  22 |
++-----+
+
+
+20. Display ids of sailors who have reserved boat no. 103.
+
+mysql> select SID from Sailors where SID in ( select SID from Reserves where BID=103);
++-----+
+| SID |
++-----+
+|  22 |
+|  31 |
+|  74 |
++-----+
+
+21. Display names of the sailors who have reserved boat 103.
+
+mysql> select Sname from Sailors where SID in ( select SID from Reserves where BID=103);
++---------+
+| Sname   |
++---------+
+| Dustin  |
+| Lubber  |
+| Horatio |
++---------+
+
+22. Display ids of sailors who have reserved 'Red' boat.
+
+mysql> select SID from Sailors where SID in ( select SID from Reserves where BID in ( select BID from Boats where Color='Red'));
++-----+
+| SID |
++-----+
+|  22 |	
+
+|  31 |
+|  64 |
++-----+
+
+
+23. Display names of sailors who have reserved at least one boat.
+
+mysql> select Sname from Sailors where SID in ( select SID from Reserves);
++---------+
+| Sname   |
++---------+
+| Dustin  |
+| Lubber  |
+| Horatio |
+| Horatio |
++---------+
+
+
+24. Display names of the sailors who have not reserved any boat.
+
+mysql> select Sname from Sailors where SID not in ( select SID from Reserves);
++--------+
+| Sname  |
++--------+
+| Brutus |
+| Andy   |
+| Rusty  |
+| Zorba  |
+| Art    |
+| Bob    |
++--------+
+
+25. Display names of sailors who have reserved 'Red' boat.
+
+mysql> select Sname from Sailors where SID in ( select SID from Reserves where BID in ( select BID from Boats where Color='Red'));
++---------+
+| Sname   |
++---------+
+| Dustin  |
+| Lubber  |
+| Horatio |
++---------+
+
+26. Display names of sailors who have reserved at least 2 boats.
+
+mysql> select Sname from Sailors where SID in ( select SID from Reserves group by SID having count(*)>=2);
++---------+
+| Sname   |
++---------+
+| Dustin  |
+| Lubber  |
+| Horatio |
++---------+
+
+27. Display names of sailors who have reserved all boats.
+
+mysql> select Sname from Sailors where SID in ( select SID from Reserves group by SID having count(*)=(select count(BID) from Boats));
++--------+
+| Sname  |
++--------+
+| Dustin |
++--------+
+
+
+28. Display names of sailors who have reserved exactly 2 boats.
+
+mysql> select Sname from Sailors where SID in ( select SID from Reserves group by SID having count(*)=2);
++---------+
+| Sname   |
++---------+
+| Horatio |
++---------+
+
+
+29. Display names of sailors who have reserved either 'Red' or 'Green' boats.
+
+mysql> select Sname from Sailors where SID in (select SID from Reserves where BID in (select BID from Boats where Color='Red' or Color='Green'));
++---------+
+| Sname   |
++---------+
+| Dustin  |
+| Lubber  |
+| Horatio |
+| Horatio |
++---------+
+
+30. Display names of sailors who have reserved both 'Red' and 'Green' boats.
+
+mysql> select Sname from Sailors where SID in (select SID from Reserves where BID in (select BID from Boats where Color='Red')) and SID in (select SID from Reserves where BID in (select BID from Boats where Color='Green'));
++--------+
+| Sname  |
++--------+
+| Dustin |
+| Lubber |
++--------+
+ 
+mysql> select Sname from Sailors where SID in ((select SID from Reserves where BID in (select BID from Boats where Color='Red')) intersect (select SID from Reserves where BID in (select BID from Boats where Color='Green')));
++--------+
+| Sname  |
++--------+
+| Dustin |
+| Lubber |
++--------+
+
+31. Display names of sailors who have reserved only 'Red' and not 'Green' boats.
+
+mysql> select Sname from Sailors where SID in( (select SID from Reserves where BID in (select BID from Boats where Color='Red')) except  (select SID from Reserves where BID in (select BID from Boats where Color='Green')));
++---------+
+| Sname   |
++---------+
+| Horatio |
++---------+
+
+mysql> select Sname from Sailors where SID in (select SID from Reserves where BID in (select BID from Boats where Color='Red')) and SID not in (select SID from Reserves where BID in (select BID from Boats where
+Color='Green'));
++---------+
+| Sname   |
++---------+
+| Horatio |
++---------+
+
+
+32. Display names of sailors with age below 50 and have reserved 'Green' colored boat.
+
+mysql> select Sname from Sailors where Age<50 and SID in (select SID from Reserves where BID in ( select BID from Boats where Color='Green'));
++---------+
+| Sname   |
++---------+
+| Dustin  |
+| Horatio |
++---------+
+
+
+33. Display all combination of sailors and reserves.
+
+mysql> select * from Sailors,Reserves;
++-----+---------+--------+------+-----+-----+------------+
+| SID | Sname   | Rating | Age  | SID | BID | Day        |
++-----+---------+--------+------+-----+-----+------------+
+|  95 | Bob     |      3 | 63.5 |  22 | 101 | 1998-10-10 |
+|  85 | Art     |      3 | 25.5 |  22 | 101 | 1998-10-10 |
+|  74 | Horatio |      9 |   40 |  22 | 101 | 1998-10-10 |
+|  71 | Zorba   |     10 |   16 |  22 | 101 | 1998-10-10 |
+|  64 | Horatio |      7 |   35 |  22 | 101 | 1998-10-10 |
+|  58 | Rusty   |     10 |   35 |  22 | 101 | 1998-10-10 |
+|  32 | Andy    |      8 | 25.5 |  22 | 101 | 1998-10-10 |
+|  31 | Lubber  |      8 | 55.5 |  22 | 101 | 1998-10-10 |
+|  29 | Brutus  |      1 |   33 |  22 | 101 | 1998-10-10 |
+|  22 | Dustin  |      7 |   45 |  22 | 101 | 1998-10-10 |
+|  95 | Bob     |      3 | 63.5 |  22 | 102 | 1998-10-10 |
+|  85 | Art     |      3 | 25.5 |  22 | 102 | 1998-10-10 |
+|  74 | Horatio |      9 |   40 |  22 | 102 | 1998-10-10 |
+|  71 | Zorba   |     10 |   16 |  22 | 102 | 1998-10-10 |
+|  64 | Horatio |      7 |   35 |  22 | 102 | 1998-10-10 |
+|  58 | Rusty   |     10 |   35 |  22 | 102 | 1998-10-10 |
+|  32 | Andy    |      8 | 25.5 |  22 | 102 | 1998-10-10 |
+|  31 | Lubber  |      8 | 55.5 |  22 | 102 | 1998-10-10 |
+|  29 | Brutus  |      1 |   33 |  22 | 102 | 1998-10-10 |
+|  22 | Dustin  |      7 |   45 |  22 | 102 | 1998-10-10 |
+|  95 | Bob     |      3 | 63.5 |  22 | 103 | 1998-10-08 |
+|  85 | Art     |      3 | 25.5 |  22 | 103 | 1998-10-08 |
+|  74 | Horatio |      9 |   40 |  22 | 103 | 1998-10-08 |
+|  71 | Zorba   |     10 |   16 |  22 | 103 | 1998-10-08 |
+|  64 | Horatio |      7 |   35 |  22 | 103 | 1998-10-08 |
+|  58 | Rusty   |     10 |   35 |  22 | 103 | 1998-10-08 |
+|  32 | Andy    |      8 | 25.5 |  22 | 103 | 1998-10-08 |
+|  31 | Lubber  |      8 | 55.5 |  22 | 103 | 1998-10-08 |
+|  29 | Brutus  |      1 |   33 |  22 | 103 | 1998-10-08 |
+|  22 | Dustin  |      7 |   45 |  22 | 103 | 1998-10-08 |
+|  95 | Bob     |      3 | 63.5 |  22 | 104 | 1998-10-07 |
+|  85 | Art     |      3 | 25.5 |  22 | 104 | 1998-10-07 |
+|  74 | Horatio |      9 |   40 |  22 | 104 | 1998-10-07 |
+|  71 | Zorba   |     10 |   16 |  22 | 104 | 1998-10-07 |
+|  64 | Horatio |      7 |   35 |  22 | 104 | 1998-10-07 |
+|  58 | Rusty   |     10 |   35 |  22 | 104 | 1998-10-07 |
+|  32 | Andy    |      8 | 25.5 |  22 | 104 | 1998-10-07 |
+|  31 | Lubber  |      8 | 55.5 |  22 | 104 | 1998-10-07 |
+|  29 | Brutus  |      1 |   33 |  22 | 104 | 1998-10-07 |
+|  22 | Dustin  |      7 |   45 |  22 | 104 | 1998-10-07 |
+|  95 | Bob     |      3 | 63.5 |  31 | 102 | 1998-11-10 |
+|  85 | Art     |      3 | 25.5 |  31 | 102 | 1998-11-10 |
+|  74 | Horatio |      9 |   40 |  31 | 102 | 1998-11-10 |
+|  71 | Zorba   |     10 |   16 |  31 | 102 | 1998-11-10 |
+|  64 | Horatio |      7 |   35 |  31 | 102 | 1998-11-10 |
+|  58 | Rusty   |     10 |   35 |  31 | 102 | 1998-11-10 |
+|  32 | Andy    |      8 | 25.5 |  31 | 102 | 1998-11-10 |
+|  31 | Lubber  |      8 | 55.5 |  31 | 102 | 1998-11-10 |
+|  29 | Brutus  |      1 |   33 |  31 | 102 | 1998-11-10 |
+|  22 | Dustin  |      7 |   45 |  31 | 102 | 1998-11-10 |
+|  95 | Bob     |      3 | 63.5 |  31 | 103 | 1998-11-06 |
+|  85 | Art     |      3 | 25.5 |  31 | 103 | 1998-11-06 |
+|  74 | Horatio |      9 |   40 |  31 | 103 | 1998-11-06 |
+|  71 | Zorba   |     10 |   16 |  31 | 103 | 1998-11-06 |
+|  64 | Horatio |      7 |   35 |  31 | 103 | 1998-11-06 |
+|  58 | Rusty   |     10 |   35 |  31 | 103 | 1998-11-06 |
+|  32 | Andy    |      8 | 25.5 |  31 | 103 | 1998-11-06 |
+|  31 | Lubber  |      8 | 55.5 |  31 | 103 | 1998-11-06 |
+|  29 | Brutus  |      1 |   33 |  31 | 103 | 1998-11-06 |
+|  22 | Dustin  |      7 |   45 |  31 | 103 | 1998-11-06 |
+|  95 | Bob     |      3 | 63.5 |  31 | 104 | 1998-11-12 |
+|  85 | Art     |      3 | 25.5 |  31 | 104 | 1998-11-12 |
+|  74 | Horatio |      9 |   40 |  31 | 104 | 1998-11-12 |
+|  71 | Zorba   |     10 |   16 |  31 | 104 | 1998-11-12 |
+|  64 | Horatio |      7 |   35 |  31 | 104 | 1998-11-12 |
+|  58 | Rusty   |     10 |   35 |  31 | 104 | 1998-11-12 |
+|  32 | Andy    |      8 | 25.5 |  31 | 104 | 1998-11-12 |
+|  31 | Lubber  |      8 | 55.5 |  31 | 104 | 1998-11-12 |
+|  29 | Brutus  |      1 |   33 |  31 | 104 | 1998-11-12 |
+|  22 | Dustin  |      7 |   45 |  31 | 104 | 1998-11-12 |
+|  95 | Bob     |      3 | 63.5 |  64 | 101 | 1998-09-05 |
+|  85 | Art     |      3 | 25.5 |  64 | 101 | 1998-09-05 |
+|  74 | Horatio |      9 |   40 |  64 | 101 | 1998-09-05 |
+|  71 | Zorba   |     10 |   16 |  64 | 101 | 1998-09-05 |
+|  64 | Horatio |      7 |   35 |  64 | 101 | 1998-09-05 |
+|  58 | Rusty   |     10 |   35 |  64 | 101 | 1998-09-05 |
+|  32 | Andy    |      8 | 25.5 |  64 | 101 | 1998-09-05 |
+|  31 | Lubber  |      8 | 55.5 |  64 | 101 | 1998-09-05 |
+|  29 | Brutus  |      1 |   33 |  64 | 101 | 1998-09-05 |
+|  22 | Dustin  |      7 |   45 |  64 | 101 | 1998-09-05 |
+|  95 | Bob     |      3 | 63.5 |  64 | 102 | 1998-09-08 |
+|  85 | Art     |      3 | 25.5 |  64 | 102 | 1998-09-08 |
+|  74 | Horatio |      9 |   40 |  64 | 102 | 1998-09-08 |
+|  71 | Zorba   |     10 |   16 |  64 | 102 | 1998-09-08 |
+|  64 | Horatio |      7 |   35 |  64 | 102 | 1998-09-08 |
+|  58 | Rusty   |     10 |   35 |  64 | 102 | 1998-09-08 |
+|  32 | Andy    |      8 | 25.5 |  64 | 102 | 1998-09-08 |
+|  31 | Lubber  |      8 | 55.5 |  64 | 102 | 1998-09-08 |
+|  29 | Brutus  |      1 |   33 |  64 | 102 | 1998-09-08 |
+|  22 | Dustin  |      7 |   45 |  64 | 102 | 1998-09-08 |
+|  95 | Bob     |      3 | 63.5 |  74 | 103 | 1998-09-08 |
+|  85 | Art     |      3 | 25.5 |  74 | 103 | 1998-09-08 |
+|  74 | Horatio |      9 |   40 |  74 | 103 | 1998-09-08 |
+|  71 | Zorba   |     10 |   16 |  74 | 103 | 1998-09-08 |
+|  64 | Horatio |      7 |   35 |  74 | 103 | 1998-09-08 |
+|  58 | Rusty   |     10 |   35 |  74 | 103 | 1998-09-08 |
+|  32 | Andy    |      8 | 25.5 |  74 | 103 | 1998-09-08 |
+|  31 | Lubber  |      8 | 55.5 |  74 | 103 | 1998-09-08 |
+|  29 | Brutus  |      1 |   33 |  74 | 103 | 1998-09-08 |
+|  22 | Dustin  |      7 |   45 |  74 | 103 | 1998-09-08 |
++-----+---------+--------+------+-----+-----+------------+
+
+
+
+34. Display name of sailors and day on which sailor has reserved the boat for all sailors.
+
+mysql> select S.Sname,R.Day from Sailors S,Reserves R where S.SID=R.SID;
++---------+------------+
+| Sname   | Day        |
++---------+------------+
+| Dustin  | 1998-10-10 |
+| Dustin  | 1998-10-10 |
+| Dustin  | 1998-10-08 |
+| Dustin  | 1998-10-07 |
+| Lubber  | 1998-11-10 |
+| Lubber  | 1998-11-06 |
+| Lubber  | 1998-11-12 |
+| Horatio | 1998-09-05 |
+| Horatio | 1998-09-08 |
+| Horatio | 1998-09-08 |
++---------+------------+
+
+
+35. Display names of sailors and day on which he has reserved the boat for boat no. 103.
+
+mysql> select S.Sname,R.Day from Sailors S,Reserves R,Boats B where S.SID=R.SID and R.BID=B.BID and B.BID=103;
++---------+------------+
+| Sname   | Day        |
++---------+------------+
+| Dustin  | 1998-10-08 |
+| Lubber  | 1998-11-06 |
+| Horatio | 1998-09-08 |
++---------+------------+
+
+36. Display colors of boats reserved by 'Lubber'.
+
+mysql> select distinct Color from Boats where BID in ( select BID from Reserves where SID in ( select SID from Sailors where Sname='Lubber'));
++---------+
+| color   |
++---------+
+| Red     |
+| Green   |
++---------+
+
+
+37. Display boat ids which are not reserved by 'Lubber'.
+
+mysql> select BID from Boats where BID not in (select BID from Reserves where SID in (select SID from Sailors where Sname='Lubber'));
++-----+
+| BID |
++-----+
+| 101 |
++-----+
+

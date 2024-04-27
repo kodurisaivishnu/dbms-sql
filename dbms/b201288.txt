@@ -1,0 +1,128 @@
+employee db
+
+1)display the names of the employess who are working for both product x and product y projects;
+
+
+mysql> select concat(fname,' ',mname,' ',lname) as emp_full_name from employee where ssn in(select essn from works_on w,project p where w.pno=p.pnumber and pname='productY') and ssn in(select essn from works_on w,project p where w.pno=p.pnumber and pname='productX');
+
++-----------------+
+| emp_full_name   |
++-----------------+
+| John B Smith    |
+| Joyce A English |
++-----------------+
+2 rows in set (0.00 sec)
+
+
+2)dispaly the total no. of hours worked by each employee on the projects;
+
+mysql> select concat(fname,' ',mname,' ',lname) ename,essn,sum(hours) from employee e,works_on w where w.essn=e.ssn group by essn;
++--------------------+-----------+------------+
+| ename              | essn      | sum(hours) |
++--------------------+-----------+------------+
+| John B Smith       | 123456789 |       40.0 |
+| Franklin T Wong    | 333445555 |       40.0 |
+| Joyce A English    | 453453453 |       40.0 |
+| Ramesh K Narayan   | 666884444 |       40.0 |
+| James E Borg       | 888665555 |       NULL |
+| Jennifer S Wallace | 987654321 |       35.0 |
+| Ahmad V Jabbar     | 987987987 |       40.0 |
+| Alicia J Zelaya    | 999887777 |       40.0 |
++--------------------+-----------+------------+
+8 rows in set (0.00 sec)
+
+
+3)display department number,department name, manager name and manager address for each dept.;
+
+mysql> select dnumber,dname,concat(fname,' ',mname,' ',lname) mgr_name,address from department d,employee e where d.mgr_ssn=e.ssn;
++---------+----------------+--------------------+------------------------+
+| dnumber | dname          | mgr_name           | address                |
++---------+----------------+--------------------+------------------------+
+|       1 | Headquarters   | James E Borg       | 450 Stone, Houston,TX  |
+|       4 | Administration | Jennifer S Wallace | 291 Berry, Bellaire,TX |
+|       5 | Research       | Franklin T Wong    | 638 Voss, Houston,TX   |
++---------+----------------+--------------------+------------------------+
+3 rows in set (0.00 sec)
+
+
+4)for the projects located at Houston display the controling dept name and the number employees working in that dept;
+
+mysql> select Dname,Dnumber,count(*) emp_count from department d,works_on w,project p where d.dnumber=p.dnum and p.pnumber=w.pno and plocation='Houston' group by Dnumber;
++--------------+---------+-----------+
+| Dname        | Dnumber | emp_count |
++--------------+---------+-----------+
+| Research     |       5 |         2 |
+| Headquarters |       1 |         3 |
++--------------+---------+-----------+
+2 rows in set (0.00 sec)
+
+sailors db
+
+1)display the folloing deatils boat vise boat id,number of sailors who have reserved that boats
+
+mysql> select bid,count(sid) from reserves group by bid;
++------+------------+
+| bid  | count(sid) |
++------+------------+
+|  101 |          2 |
+|  102 |          3 |
+|  103 |          3 |
+|  104 |          2 |
++------+------------+
+4 rows in set (0.02 sec)
+
+
+
+2)display the name and color of boats reserved by sailors with rating 10;
+
+mysql> select sname,color from sailer s,reserves r,boats b where s.sid=r.sid and r.bid=b.bid and rating=10;
+Empty set (0.00 sec)
+## since rating 10 has to sid 58 and 71 they did't reserved any of boat
+
+3)display the rating of the sailor who have reserved all the boats;
+
+mysql> select sname,rating from sailer where sid in(select sid from reserves group by sid having count(bid)=(select count(*) from boats));
++--------+--------+
+| sname  | rating |
++--------+--------+
+| Dustin |      7 |
++--------+--------+
+1 row in set (0.00 sec)
+
+
+4)add an attribute to the sailors table "address (string)"
+
+and update the value of address as houton for the sailors whose name starts with d;
+
+
+mysql> alter table sailer add column address varchar(100);
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> update sailer set address='houton' where sname like 'd%';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

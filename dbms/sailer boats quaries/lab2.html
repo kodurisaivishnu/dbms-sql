@@ -1,0 +1,660 @@
+<pre><font color="#26A269"><b>user@mr-koduri</b></font>:<font color="#12488B"><b>~</b></font>$ mysql -u root -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 8.0.34-0ubuntu0.22.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2023, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type &apos;help;&apos; or &apos;\h&apos; for help. Type &apos;\c&apos; to clear the current input statement.
+
+mysql&gt; show databases;
++--------------------+
+| Database           |
++--------------------+
+| collage            |
+| information_schema |
+| mysql              |
+| performance_schema |
+| practice           |
+| student            |
+| sys                |
+| week2              |
++--------------------+
+8 rows in set (0.01 sec)
+
+mysql&gt; create database lab2;
+Query OK, 1 row affected (0.01 sec)
+
+mysql&gt; show databases;
++--------------------+
+| Database           |
++--------------------+
+| collage            |
+| information_schema |
+| lab2               |
+| mysql              |
+| performance_schema |
+| practice           |
+| student            |
+| sys                |
+| week2              |
++--------------------+
+9 rows in set (0.00 sec)
+
+mysql&gt; use lab2;
+Database changed
+mysql&gt; create table sailer(sid int,sname varchar(40),rating tinyint,age real);
+Query OK, 0 rows affected (0.02 sec)
+
+mysql&gt; desc sailer;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| sid    | int         | YES  |     | NULL    |       |
+| sname  | varchar(40) | YES  |     | NULL    |       |
+| rating | tinyint     | YES  |     | NULL    |       |
+| age    | double      | YES  |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql&gt; insert into sailer values(22,&quot;Dustin&quot;,7,45.0);
+Query OK, 1 row affected (0.00 sec)
+
+mysql&gt; select * from lab2;
+ERROR 1146 (42S02): Table &apos;lab2.lab2&apos; doesn&apos;t exist
+mysql&gt; select * from sailer;
++------+--------+--------+------+
+| sid  | sname  | rating | age  |
++------+--------+--------+------+
+|   22 | Dustin |      7 |   45 |
++------+--------+--------+------+
+1 row in set (0.00 sec)
+
+mysql&gt; insert into sailer values(29,&quot;Brutus&quot;,1,33),(31,&quot;Lubber&quot;,8,55.5);
+Query OK, 2 rows affected (0.00 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql&gt; select * from sailer;
++------+--------+--------+------+
+| sid  | sname  | rating | age  |
++------+--------+--------+------+
+|   22 | Dustin |      7 |   45 |
+|   29 | Brutus |      1 |   33 |
+|   31 | Lubber |      8 | 55.5 |
++------+--------+--------+------+
+3 rows in set (0.00 sec)
+
+mysql&gt; insert into sailer values(32,&quot;Andy&quot;,8,25.5),(58,&quot;Rusty&quot;,10,35),(64,&quot;Horatio&quot;,7,35),(71,&quot;Zorba&quot;,10,16),(74,&quot;Horatio&quot;,9,40),(85,&quot;Art&quot;,3,25.5),(95,&quot;bob&quot;,3,63.5);
+Query OK, 7 rows affected (0.00 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+mysql&gt; select * from sailer;
++------+---------+--------+------+
+| sid  | sname   | rating | age  |
++------+---------+--------+------+
+|   22 | Dustin  |      7 |   45 |
+|   29 | Brutus  |      1 |   33 |
+|   31 | Lubber  |      8 | 55.5 |
+|   32 | Andy    |      8 | 25.5 |
+|   58 | Rusty   |     10 |   35 |
+|   64 | Horatio |      7 |   35 |
+|   71 | Zorba   |     10 |   16 |
+|   74 | Horatio |      9 |   40 |
+|   85 | Art     |      3 | 25.5 |
+|   95 | bob     |      3 | 63.5 |
++------+---------+--------+------+
+10 rows in set (0.00 sec)
+
+mysql&gt; create table reserves;
+ERROR 4028 (HY000): A table must have at least one visible column.
+mysql&gt; create table reserves(sid int,bid int, day date);
+Query OK, 0 rows affected (0.01 sec)
+
+mysql&gt; desc reserves;
++-------+------+------+-----+---------+-------+
+| Field | Type | Null | Key | Default | Extra |
++-------+------+------+-----+---------+-------+
+| sid   | int  | YES  |     | NULL    |       |
+| bid   | int  | YES  |     | NULL    |       |
+| day   | date | YES  |     | NULL    |       |
++-------+------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql&gt; insert into reserves value(22,101,&apos;1998-10-10&apos;);
+Query OK, 1 row affected (0.00 sec)
+
+mysql&gt; select * from reserves;
++------+------+------------+
+| sid  | bid  | day        |
++------+------+------------+
+|   22 |  101 | 1998-10-10 |
++------+------+------------+
+1 row in set (0.00 sec)
+
+mysql&gt; select montth(day) from reserves;
+ERROR 1305 (42000): FUNCTION lab2.montth does not exist
+mysql&gt; select month(day) from reserves;
++------------+
+| month(day) |
++------------+
+|         10 |
++------------+
+1 row in set (0.00 sec)
+
+mysql&gt; insert into reserves value(22,102,&apos;1998-10-10&apos;);
+Query OK, 1 row affected (0.00 sec)
+
+mysql&gt; insert into reserves value(22,103,&apos;1998-10-08&apos;),(22,104,&apos;1998-10-07&apos;),(31,102,&apos;1998-11-10&apos;),(31,103,&apos;1998-11-06&apos;),(31,104,&apos;1998-11-12&apos;),(64,101,&apos;1998-09-05&apos;),(64,102,&apos;1998-09-08&apos;),(74,103-&apos;1998-09-08&apos;);
+ERROR 1136 (21S01): Column count doesn&apos;t match value count at row 8
+mysql&gt; insert into reserves value(22,103,&apos;1998-10-08&apos;),(22,104,&apos;1998-10-07&apos;),(31,102,&apos;1998-11-10&apos;),(31,103,&apos;1998-11-06&apos;),(31,104,&apos;1998-11-12&apos;),(64,101,&apos;1998-09-05&apos;);
+Query OK, 6 rows affected (0.01 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql&gt; select * from reserves;
++------+------+------------+
+| sid  | bid  | day        |
++------+------+------------+
+|   22 |  101 | 1998-10-10 |
+|   22 |  102 | 1998-10-10 |
+|   22 |  103 | 1998-10-08 |
+|   22 |  104 | 1998-10-07 |
+|   31 |  102 | 1998-11-10 |
+|   31 |  103 | 1998-11-06 |
+|   31 |  104 | 1998-11-12 |
+|   64 |  101 | 1998-09-05 |
++------+------+------------+
+8 rows in set (0.00 sec)
+
+mysql&gt; insert into reserves value(64,102,&apos;1998-09-08&apos;),(74,103,&apos;1998-09-08&apos;);
+Query OK, 2 rows affected (0.00 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql&gt; select * from reserves;
++------+------+------------+
+| sid  | bid  | day        |
++------+------+------------+
+|   22 |  101 | 1998-10-10 |
+|   22 |  102 | 1998-10-10 |
+|   22 |  103 | 1998-10-08 |
+|   22 |  104 | 1998-10-07 |
+|   31 |  102 | 1998-11-10 |
+|   31 |  103 | 1998-11-06 |
+|   31 |  104 | 1998-11-12 |
+|   64 |  101 | 1998-09-05 |
+|   64 |  102 | 1998-09-08 |
+|   74 |  103 | 1998-09-08 |
++------+------+------------+
+10 rows in set (0.00 sec)
+
+mysql&gt; 
+
+</pre>
+
+
+
+
+
+
+
+
+
+
+
+
+<h1>Quaries and practice</h1>
+
+
+
+
+
+
+
+<pre><font color="#26A269"><b>user@mr-koduri</b></font>:<font color="#12488B"><b>~</b></font>$ mysql -u root -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 8.0.34-0ubuntu0.22.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2023, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type &apos;help;&apos; or &apos;\h&apos; for help. Type &apos;\c&apos; to clear the current input statement.
+
+mysql&gt; show databases;
++--------------------+
+| Database           |
++--------------------+
+| collage            |
+| information_schema |
+| lab2               |
+| mysql              |
+| performance_schema |
+| practice           |
+| student            |
+| sys                |
+| week2              |
++--------------------+
+9 rows in set (0.00 sec)
+
+mysql&gt; use lab2;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql&gt; use lab2;
+Database changed
+mysql&gt; show tables;
++----------------+
+| Tables_in_lab2 |
++----------------+
+| reserves       |
+| sailer         |
++----------------+
+2 rows in set (0.00 sec)
+
+mysql&gt; show reserves;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near &apos;reserves&apos; at line 1
+mysql&gt; show table reserves;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near &apos;reserves&apos; at line 1
+mysql&gt; select * from reserves;
++------+------+------------+
+| sid  | bid  | day        |
++------+------+------------+
+|   22 |  101 | 1998-10-10 |
+|   22 |  102 | 1998-10-10 |
+|   22 |  103 | 1998-10-08 |
+|   22 |  104 | 1998-10-07 |
+|   31 |  102 | 1998-11-10 |
+|   31 |  103 | 1998-11-06 |
+|   31 |  104 | 1998-11-12 |
+|   64 |  101 | 1998-09-05 |
+|   64 |  102 | 1998-09-08 |
+|   74 |  103 | 1998-09-08 |
++------+------+------------+
+10 rows in set (0.00 sec)
+
+mysql&gt; select * from sailer;
++------+---------+--------+------+
+| sid  | sname   | rating | age  |
++------+---------+--------+------+
+|   22 | Dustin  |      7 |   45 |
+|   29 | Brutus  |      1 |   33 |
+|   31 | Lubber  |      8 | 55.5 |
+|   32 | Andy    |      8 | 25.5 |
+|   58 | Rusty   |     10 |   35 |
+|   64 | Horatio |      7 |   35 |
+|   71 | Zorba   |     10 |   16 |
+|   74 | Horatio |      9 |   40 |
+|   85 | Art     |      3 | 25.5 |
+|   95 | bob     |      3 | 63.5 |
++------+---------+--------+------+
+10 rows in set (0.00 sec)
+
+mysql&gt; create table boats;
+ERROR 4028 (HY000): A table must have at least one visible column.
+mysql&gt; create table boats(bid int,bname varchar(30),color varchar(10));
+Query OK, 0 rows affected (0.01 sec)
+
+mysql&gt; insert into boats values(101,&quot;Interlake&quot;,&quot;Blue&quot;),(102,&quot;Interlake&quot;,&quot;Red&quot;),(103,&quot;Clipper&quot;,&quot;Green&quot;),(104,&quot;&quot;Marin&quot;,&quot;Red&quot;);
+    &quot;&gt; &quot;;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near &apos;Marin&quot;,&quot;Red&quot;);
+&quot;&apos; at line 1
+mysql&gt; insert into boats values(101,&quot;Interlake&quot;,&quot;Blue&quot;),(102,&quot;Interlake&quot;,&quot;Red&quot;),(103,&quot;Clipper&quot;,&quot;Green&quot;),(104,&quot;Marin&quot;,&quot;Red&quot;);
+Query OK, 4 rows affected (0.00 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql&gt; show tables
+    -&gt; ;
++----------------+
+| Tables_in_lab2 |
++----------------+
+| boats          |
+| reserves       |
+| sailer         |
++----------------+
+3 rows in set (0.01 sec)
+
+mysql&gt; select * from boats;
++------+-----------+-------+
+| bid  | bname     | color |
++------+-----------+-------+
+|  101 | Interlake | Blue  |
+|  102 | Interlake | Red   |
+|  103 | Clipper   | Green |
+|  104 | Marin     | Red   |
++------+-----------+-------+
+4 rows in set (0.01 sec)
+
+mysql&gt; quary start
+    -&gt; ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near &apos;quary start&apos; at line 1
+mysql&gt; select * from reserves;
++------+------+------------+
+| sid  | bid  | day        |
++------+------+------------+
+|   22 |  101 | 1998-10-10 |
+|   22 |  102 | 1998-10-10 |
+|   22 |  103 | 1998-10-08 |
+|   22 |  104 | 1998-10-07 |
+|   31 |  102 | 1998-11-10 |
+|   31 |  103 | 1998-11-06 |
+|   31 |  104 | 1998-11-12 |
+|   64 |  101 | 1998-09-05 |
+|   64 |  102 | 1998-09-08 |
+|   74 |  103 | 1998-09-08 |
++------+------+------------+
+10 rows in set (0.00 sec)
+
+mysql&gt; select * from sailer;
++------+---------+--------+------+
+| sid  | sname   | rating | age  |
++------+---------+--------+------+
+|   22 | Dustin  |      7 |   45 |
+|   29 | Brutus  |      1 |   33 |
+|   31 | Lubber  |      8 | 55.5 |
+|   32 | Andy    |      8 | 25.5 |
+|   58 | Rusty   |     10 |   35 |
+|   64 | Horatio |      7 |   35 |
+|   71 | Zorba   |     10 |   16 |
+|   74 | Horatio |      9 |   40 |
+|   85 | Art     |      3 | 25.5 |
+|   95 | bob     |      3 | 63.5 |
++------+---------+--------+------+
+10 rows in set (0.00 sec)
+
+mysql&gt; select sname from sailer;
++---------+
+| sname   |
++---------+
+| Dustin  |
+| Brutus  |
+| Lubber  |
+| Andy    |
+| Rusty   |
+| Horatio |
+| Zorba   |
+| Horatio |
+| Art     |
+| bob     |
++---------+
+10 rows in set (0.00 sec)
+
+mysql&gt; select count(sname) from sailer;
++--------------+
+| count(sname) |
++--------------+
+|           10 |
++--------------+
+1 row in set (0.00 sec)
+
+mysql&gt; select color from boats;
++-------+
+| color |
++-------+
+| Blue  |
+| Red   |
+| Green |
+| Red   |
++-------+
+4 rows in set (0.00 sec)
+
+mysql&gt; select age from sailer where age&gt;40;
++------+
+| age  |
++------+
+|   45 |
+| 55.5 |
+| 63.5 |
++------+
+3 rows in set (0.00 sec)
+
+mysql&gt; select color from boats where name=&quot;Interlake&quot;;
+ERROR 1054 (42S22): Unknown column &apos;name&apos; in &apos;where clause&apos;
+mysql&gt; select color from boats where bname=&quot;Interlake&quot;;
++-------+
+| color |
++-------+
+| Blue  |
+| Red   |
++-------+
+2 rows in set (0.00 sec)
+
+mysql&gt; select sname,sid from sailer where rating=8;
++--------+------+
+| sname  | sid  |
++--------+------+
+| Lubber |   31 |
+| Andy   |   32 |
++--------+------+
+2 rows in set (0.00 sec)
+
+mysql&gt; select boat id  from sailer has reserved by 22 
+    -&gt; ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near &apos;reserved by 22&apos; at line 1
+mysql&gt; select bid from reserves where sid=22;
++------+
+| bid  |
++------+
+|  101 |
+|  102 |
+|  103 |
+|  104 |
++------+
+4 rows in set (0.00 sec)
+
+mysql&gt; select count(sid) from sailers where rating=3;
+ERROR 1146 (42S02): Table &apos;lab2.sailers&apos; doesn&apos;t exist
+mysql&gt; select count(sid) from sailer where rating=3;
++------------+
+| count(sid) |
++------------+
+|          2 |
++------------+
+1 row in set (0.00 sec)
+
+mysql&gt; select sname from sailer order by desc limit 3;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near &apos;desc limit 3&apos; at line 1
+mysql&gt; select sname from sailer order by desc;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near &apos;desc&apos; at line 1
+mysql&gt; select sname from sailer;
++---------+
+| sname   |
++---------+
+| Dustin  |
+| Brutus  |
+| Lubber  |
+| Andy    |
+| Rusty   |
+| Horatio |
+| Zorba   |
+| Horatio |
+| Art     |
+| bob     |
++---------+
+10 rows in set (0.00 sec)
+
+mysql&gt; select sname from sailer order by;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near &apos;&apos; at line 1
+mysql&gt; select sname from sailer order by age;
++---------+
+| sname   |
++---------+
+| Zorba   |
+| Andy    |
+| Art     |
+| Brutus  |
+| Rusty   |
+| Horatio |
+| Horatio |
+| Dustin  |
+| Lubber  |
+| bob     |
++---------+
+10 rows in set (0.00 sec)
+
+mysql&gt; select sname,age from sailer order by age;
++---------+------+
+| sname   | age  |
++---------+------+
+| Zorba   |   16 |
+| Andy    | 25.5 |
+| Art     | 25.5 |
+| Brutus  |   33 |
+| Rusty   |   35 |
+| Horatio |   35 |
+| Horatio |   40 |
+| Dustin  |   45 |
+| Lubber  | 55.5 |
+| bob     | 63.5 |
++---------+------+
+10 rows in set (0.00 sec)
+
+mysql&gt; select sname,age from sailer order by age desc;
++---------+------+
+| sname   | age  |
++---------+------+
+| bob     | 63.5 |
+| Lubber  | 55.5 |
+| Dustin  |   45 |
+| Horatio |   40 |
+| Rusty   |   35 |
+| Horatio |   35 |
+| Brutus  |   33 |
+| Andy    | 25.5 |
+| Art     | 25.5 |
+| Zorba   |   16 |
++---------+------+
+10 rows in set (0.00 sec)
+
+mysql&gt; select sname,age from sailer order by age desc limit 3;
++--------+------+
+| sname  | age  |
++--------+------+
+| bob    | 63.5 |
+| Lubber | 55.5 |
+| Dustin |   45 |
++--------+------+
+3 rows in set (0.00 sec)
+
+mysql&gt; show tables;
++----------------+
+| Tables_in_lab2 |
++----------------+
+| boats          |
+| reserves       |
+| sailer         |
++----------------+
+3 rows in set (0.00 sec)
+
+mysql&gt; select * from boats;
++------+-----------+-------+
+| bid  | bname     | color |
++------+-----------+-------+
+|  101 | Interlake | Blue  |
+|  102 | Interlake | Red   |
+|  103 | Clipper   | Green |
+|  104 | Marin     | Red   |
++------+-----------+-------+
+4 rows in set (0.00 sec)
+
+mysql&gt; select * from reserves;
++------+------+------------+
+| sid  | bid  | day        |
++------+------+------------+
+|   22 |  101 | 1998-10-10 |
+|   22 |  102 | 1998-10-10 |
+|   22 |  103 | 1998-10-08 |
+|   22 |  104 | 1998-10-07 |
+|   31 |  102 | 1998-11-10 |
+|   31 |  103 | 1998-11-06 |
+|   31 |  104 | 1998-11-12 |
+|   64 |  101 | 1998-09-05 |
+|   64 |  102 | 1998-09-08 |
+|   74 |  103 | 1998-09-08 |
++------+------+------------+
+10 rows in set (0.00 sec)
+
+mysql&gt; select * from sailer;
++------+---------+--------+------+
+| sid  | sname   | rating | age  |
++------+---------+--------+------+
+|   22 | Dustin  |      7 |   45 |
+|   29 | Brutus  |      1 |   33 |
+|   31 | Lubber  |      8 | 55.5 |
+|   32 | Andy    |      8 | 25.5 |
+|   58 | Rusty   |     10 |   35 |
+|   64 | Horatio |      7 |   35 |
+|   71 | Zorba   |     10 |   16 |
+|   74 | Horatio |      9 |   40 |
+|   85 | Art     |      3 | 25.5 |
+|   95 | bob     |      3 | 63.5 |
++------+---------+--------+------+
+10 rows in set (0.00 sec)
+
+mysql&gt; select snames from sailer where sid=(select sid from reserves where bid =(select bid from boats where color=&quot;Red&quot;));
+ERROR 1054 (42S22): Unknown column &apos;snames&apos; in &apos;field list&apos;
+mysql&gt; select sid from reserves where bid =select bid from boats where color=&quot;Red&quot;
+    -&gt; ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near &apos;select bid from boats where color=&quot;Red&quot;&apos; at line 1
+mysql&gt; select sid from reserves where bid =(select bid from boats where color=&quot;Red&quot;);
+ERROR 1242 (21000): Subquery returns more than 1 row
+mysql&gt; select sid from reserves where bid =(select bid from boats where color=&quot;Red&quot;) limit 1;;
+ERROR 1242 (21000): Subquery returns more than 1 row
+ERROR: 
+No query specified
+
+mysql&gt; select sid from reserves where bid =(select bid from boats where color=&quot;Red&quot; limit 1);
++------+
+| sid  |
++------+
+|   22 |
+|   31 |
+|   64 |
++------+
+3 rows in set (0.00 sec)
+
+mysql&gt; select bid from boats where color=&quot;Red&quot; limit 1)
+    -&gt; ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near &apos;)&apos; at line 1
+mysql&gt; select bid from boats where color=&quot;Red&quot; limit 1;
++------+
+| bid  |
++------+
+|  102 |
++------+
+1 row in set (0.00 sec)
+
+mysql&gt; select sid from reserves where=(select bid from boats where color=&quot;Red&quot;);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near &apos;=(select bid from boats where color=&quot;Red&quot;)&apos; at line 1
+mysql&gt; select sid from reserves where bid=(select bid from boats where color=&quot;Red&quot;);
+ERROR 1242 (21000): Subquery returns more than 1 row
+mysql&gt; select bid from boats where color=&quot;Red&quot;;
++------+
+| bid  |
++------+
+|  102 |
+|  104 |
++------+
+2 rows in set (0.00 sec)
+
+mysql&gt; select sid from reserves where bid=(select bid from boats where color=&quot;Red&quot; limit 1);
++------+
+| sid  |
++------+
+|   22 |
+|   31 |
+|   64 |
++------+
+3 rows in set (0.00 sec)
+
+mysql&gt; 
+
+</pre>

@@ -1,0 +1,419 @@
+1.  Retrieve the birth date and address of the employee(s) whose name is ‘John B. Smith’. 
+
+mysql> select Bdate,Address from employee where Fname='John' and Mname='B' and Lname='Smith';
++------------+-------------------------+
+| Bdate      | Address                 |
++------------+-------------------------+
+| 1965-01-09 | 731 Fondren, Houston,TX |
++------------+-------------------------+
+
+
+2. Retrieve the name and address of all employees who work for the
+‘Research’ department.
+
+mysql> select concat(fname,' ',mname,' ',lname) as Name,Address from employee where Dno in(select Dnumber from department where Dname='Research');
++------------------+-------------------------+
+| Name             | Address                 |
++------------------+-------------------------+
+| John B Smith     | 731 Fondren, Houston,TX |
+| Franklin T Wong  | 638 Voss, Houston,TX    |
+| Joyce A English  | 5631 Rice, Houston,TX   |
+| Ramesh K Narayan | 975 Fire Oak, Humble,TX |
++------------------+-------------------------+
+
+
+
+3. For every project located in ‘Stafford’, list the project number, the controlling department number, and the department manager’s last name, address, and birth date.
+
+mysql> select pnumber,p.dnum,lname,address,bdate from employee e,department d,project p where p.dnum=d.dnumber and e.ssn=d.mgr_ssn and plocation='Stafford';
++---------+------+---------+------------------------+------------+
+| pnumber | dnum | lname   | address                | bdate      |
++---------+------+---------+------------------------+------------+
+|      10 |    4 | Wallace | 291 Berry, Bellaire,TX | 1941-06-20 |
+|      30 |    4 | Wallace | 291 Berry, Bellaire,TX | 1941-06-20 |
++---------+------+---------+------------------------+------------+
+
+4. For each employee, retrieve the employee’s first and last name and the first and last name of his or her immediate supervisor.
+
+mysql> select e.fname as empFname,e.lname as empLname,s.fname as supFname,s.lname as supLname from employee e,employee s where e.super_ssn=s.ssn;
++----------+----------+----------+----------+
+| empFname | empLname | supFname | supLname |
++----------+----------+----------+----------+
+| John     | Smith    | Franklin | Wong     |
+| Franklin | Wong     | James    | Borg     |
+| Joyce    | English  | Franklin | Wong     |
+| Ramesh   | Narayan  | Franklin | Wong     |
+| Jennifer | Wallace  | James    | Borg     |
+| Ahmad    | Jabbar   | Jennifer | Wallace  |
+| Alicia   | Zelaya   | Jennifer | Wallace  |
++----------+----------+----------+----------+
+
+5. Write a query which is retrieves all the attribute values of any EMPLOYEE who works in DEPARTMENT number 5.
+
+mysql> select * from employee where dno=5;
++----------+-------+---------+-----------+------------+-------------------------+------+----------+-----------+-----+
+| Fname    | Mname | Lname   | Ssn       | Bdate      | Address                 | Sex  | Salary   | Super_ssn | Dno |
++----------+-------+---------+-----------+------------+-------------------------+------+----------+-----------+-----+
+| John     | B     | Smith   | 123456789 | 1965-01-09 | 731 Fondren, Houston,TX | M    | 30000.00 | 333445555 |   5 |
+| Franklin | T     | Wong    | 333445555 | 1955-12-08 | 638 Voss, Houston,TX    | F    | 40000.00 | 888665555 |   5 |
+| Joyce    | A     | English | 453453453 | 1972-07-31 | 5631 Rice, Houston,TX   | F    | 25000.00 | 333445555 |   5 |
+| Ramesh   | K     | Narayan | 666884444 | 1962-09-15 | 975 Fire Oak, Humble,TX | M    | 38000.00 | 333445555 |   5 |
++----------+-------+---------+-----------+------------+-------------------------+------+----------+-----------+-----+
+
+
+6. write a query which is retrieves all the attributes of an EMPLOYEE and attributes of the DEPARTMENT in which he or she works for every employee of the ‘Research’ department,  
+
+Query : mysql> select e.*,d.* from employee e,department d where d.dnumber=e.dno and d.dname='Research';
++----------+-------+---------+-----------+------------+-------------------------+------+----------+-----------+-----+----------+---------+-----------+----------------+
+| Fname    | Mname | Lname   | Ssn       | Bdate      | Address                 | Sex  | Salary   | Super_ssn | Dno | Dname    | Dnumber | mgr_ssn   | Mgr_start_date |
++----------+-------+---------+-----------+------------+-------------------------+------+----------+-----------+-----+----------+---------+-----------+----------------+
+| John     | B     | Smith   | 123456789 | 1965-01-09 | 731 Fondren, Houston,TX | M    | 30000.00 | 333445555 |   5 | Research |       5 | 333445555 | 1988-05-22     |
+| Franklin | T     | Wong    | 333445555 | 1955-12-08 | 638 Voss, Houston,TX    | F    | 40000.00 | 888665555 |   5 | Research |       5 | 333445555 | 1988-05-22     |
+| Joyce    | A     | English | 453453453 | 1972-07-31 | 5631 Rice, Houston,TX   | F    | 25000.00 | 333445555 |   5 | Research |       5 | 333445555 | 1988-05-22     |
+| Ramesh   | K     | Narayan | 666884444 | 1962-09-15 | 975 Fire Oak, Humble,TX | M    | 38000.00 | 333445555 |   5 | Research |       5 | 333445555 | 1988-05-22     |
++----------+-------+---------+-----------+------------+-------------------------+------+----------+-----------+-----+----------+---------+-----------+----------------+
+
+
+
+7. write a query which is specifies the CROSS PRODUCT of the EMPLOYEE and DEPARTMENT relations.
+
+mysql> select * from employee,department;
++----------+-------+---------+-----------+------------+-------------------------+------+----------+-----------+-----+----------------+---------+-----------+----------------+
+| Fname    | Mname | Lname   | Ssn       | Bdate      | Address                 | Sex  | Salary   | Super_ssn | Dno | Dname          | Dnumber | mgr_ssn   | Mgr_start_date |
++----------+-------+---------+-----------+------------+-------------------------+------+----------+-----------+-----+----------------+---------+-----------+----------------+
+| John     | B     | Smith   | 123456789 | 1965-01-09 | 731 Fondren, Houston,TX | M    | 30000.00 | 333445555 |   5 | Research       |       5 | 333445555 | 1988-05-22     |
+| John     | B     | Smith   | 123456789 | 1965-01-09 | 731 Fondren, Houston,TX | M    | 30000.00 | 333445555 |   5 | Administration |       4 | 987654321 | 1995-01-01     |
+| John     | B     | Smith   | 123456789 | 1965-01-09 | 731 Fondren, Houston,TX | M    | 30000.00 | 333445555 |   5 | Headquarters   |       1 | 888665555 | 1981-06-19     |
+| Franklin | T     | Wong    | 333445555 | 1955-12-08 | 638 Voss, Houston,TX    | F    | 40000.00 | 888665555 |   5 | Research       |       5 | 333445555 | 1988-05-22     |
+| Franklin | T     | Wong    | 333445555 | 1955-12-08 | 638 Voss, Houston,TX    | F    | 40000.00 | 888665555 |   5 | Administration |       4 | 987654321 | 1995-01-01     |
+| Franklin | T     | Wong    | 333445555 | 1955-12-08 | 638 Voss, Houston,TX    | F    | 40000.00 | 888665555 |   5 | Headquarters   |       1 | 888665555 | 1981-06-19     |
+| Joyce    | A     | English | 453453453 | 1972-07-31 | 5631 Rice, Houston,TX   | F    | 25000.00 | 333445555 |   5 | Research       |       5 | 333445555 | 1988-05-22     |
+| Joyce    | A     | English | 453453453 | 1972-07-31 | 5631 Rice, Houston,TX   | F    | 25000.00 | 333445555 |   5 | Administration |       4 | 987654321 | 1995-01-01     |
+| Joyce    | A     | English | 453453453 | 1972-07-31 | 5631 Rice, Houston,TX   | F    | 25000.00 | 333445555 |   5 | Headquarters   |       1 | 888665555 | 1981-06-19     |
+| Ramesh   | K     | Narayan | 666884444 | 1962-09-15 | 975 Fire Oak, Humble,TX | M    | 38000.00 | 333445555 |   5 | Research       |       5 | 333445555 | 1988-05-22     |
+| Ramesh   | K     | Narayan | 666884444 | 1962-09-15 | 975 Fire Oak, Humble,TX | M    | 38000.00 | 333445555 |   5 | Administration |       4 | 987654321 | 1995-01-01     |
+| Ramesh   | K     | Narayan | 666884444 | 1962-09-15 | 975 Fire Oak, Humble,TX | M    | 38000.00 | 333445555 |   5 | Headquarters   |       1 | 888665555 | 1981-06-19     |
+| James    | E     | Borg    | 888665555 | 1937-11-10 | 450 Stone, Houston,TX   | M    | 55000.00 | NULL      |   1 | Research       |       5 | 333445555 | 1988-05-22     |
+| James    | E     | Borg    | 888665555 | 1937-11-10 | 450 Stone, Houston,TX   | M    | 55000.00 | NULL      |   1 | Administration |       4 | 987654321 | 1995-01-01     |
+| James    | E     | Borg    | 888665555 | 1937-11-10 | 450 Stone, Houston,TX   | M    | 55000.00 | NULL      |   1 | Headquarters   |       1 | 888665555 | 1981-06-19     |
+| Jennifer | S     | Wallace | 987654321 | 1941-06-20 | 291 Berry, Bellaire,TX  | F    | 43000.00 | 888665555 |   4 | Research       |       5 | 333445555 | 1988-05-22     |
+| Jennifer | S     | Wallace | 987654321 | 1941-06-20 | 291 Berry, Bellaire,TX  | F    | 43000.00 | 888665555 |   4 | Administration |       4 | 987654321 | 1995-01-01     |
+| Jennifer | S     | Wallace | 987654321 | 1941-06-20 | 291 Berry, Bellaire,TX  | F    | 43000.00 | 888665555 |   4 | Headquarters   |       1 | 888665555 | 1981-06-19     |
+| Ahmad    | V     | Jabbar  | 987987987 | 1969-03-29 | 980 Dallas, Houston,TX  | M    | 25000.00 | 987654321 |   4 | Research       |       5 | 333445555 | 1988-05-22     |
+| Ahmad    | V     | Jabbar  | 987987987 | 1969-03-29 | 980 Dallas, Houston,TX  | M    | 25000.00 | 987654321 |   4 | Administration |       4 | 987654321 | 1995-01-01     |
+| Ahmad    | V     | Jabbar  | 987987987 | 1969-03-29 | 980 Dallas, Houston,TX  | M    | 25000.00 | 987654321 |   4 | Headquarters   |       1 | 888665555 | 1981-06-19     |
+| Alicia   | J     | Zelaya  | 999887777 | 1968-01-19 | 3321 Castle, Spring,TX  | F    | 25000.00 | 987654321 |   4 | Research       |       5 | 333445555 | 1988-05-22     |
+| Alicia   | J     | Zelaya  | 999887777 | 1968-01-19 | 3321 Castle, Spring,TX  | F    | 25000.00 | 987654321 |   4 | Administration |       4 | 987654321 | 1995-01-01     |
+| Alicia   | J     | Zelaya  | 999887777 | 1968-01-19 | 3321 Castle, Spring,TX  | F    | 25000.00 | 987654321 |   4 | Headquarters   |       1 | 888665555 | 1981-06-19     |
++----------+-------+---------+-----------+------------+-------------------------+------+----------+-----------+-----+----------------+---------+-----------+----------------+
+
+
+
+8,9.  Select all EMPLOYEE  Ssns in the database.
+
+mysql> select ssn from employee;
++-----------+
+| ssn       |
++-----------+
+| 888665555 |
+| 987654321 |
+| 987987987 |
+| 999887777 |
+| 123456789 |
+| 333445555 |
+| 453453453 |
+| 666884444 |
++-----------+
+
+10. Retrieve the salary of every employee .
+
+mysql>  select salary from employee;
++----------+
+| salary   |
++----------+
+| 30000.00 |
+| 40000.00 |
+| 25000.00 |
+| 38000.00 |
+| 55000.00 |
+| 43000.00 |
+| 25000.00 |
+| 25000.00 |
++----------+
+
+11. Retrieve the all distinct salary value.
+
+mysql> select distinct salary from employee;
++----------+
+| salary   |
++----------+
+| 30000.00 |
+| 40000.00 |
+| 25000.00 |
+| 38000.00 |
+| 55000.00 |
+| 43000.00 |
++----------+
+
+
+12. Make a list of all project numbers for projects that involve an employee whose last name is ‘Smith’, either as a worker or as a manager of the department that controls the project.
+
+mysql> (select pnumber from project where dnum in (select dnumber from department where mgr_ssn = (select ssn from employee where lname='Smith'))) union (select pno from works_on where essn = (select ssn from employee where lname='Smith'));
++---------+
+| pnumber |
++---------+
+|       1 |
+|       2 |
++---------+
+
+
+13. Retrieve all employees whose address is in Houston, Texas. 
+
+mysql> select * from employee where address like '%Houston,TX';
++----------+-------+---------+-----------+------------+-------------------------+------+----------+-----------+-----+
+| Fname    | Mname | Lname   | Ssn       | Bdate      | Address                 | Sex  | Salary   | Super_ssn | Dno |
++----------+-------+---------+-----------+------------+-------------------------+------+----------+-----------+-----+
+| John     | B     | Smith   | 123456789 | 1965-01-09 | 731 Fondren, Houston,TX | M    | 30000.00 | 333445555 |   5 |
+| Franklin | T     | Wong    | 333445555 | 1955-12-08 | 638 Voss, Houston,TX    | F    | 40000.00 | 888665555 |   5 |
+| Joyce    | A     | English | 453453453 | 1972-07-31 | 5631 Rice, Houston,TX   | F    | 25000.00 | 333445555 |   5 |
+| James    | E     | Borg    | 888665555 | 1937-11-10 | 450 Stone, Houston,TX   | M    | 55000.00 | NULL      |   1 |
+| Ahmad    | V     | Jabbar  | 987987987 | 1969-03-29 | 980 Dallas, Houston,TX  | M    | 25000.00 | 987654321 |   4 |
++----------+-------+---------+-----------+------------+-------------------------+------+----------+-----------+-----+
+
+
+14. Find all employees who were born during the 1950s.
+
+mysql> select concat(fname,' ',mname,' ',lname) as empName1950s from employee where year(bdate)>=1950 and year(bdate)<=1959;
++-----------------+
+| empName1950s    |
++-----------------+
+| Franklin T Wong |
++-----------------+
+
+mysql>  select concat(fname,' ',mname,' ',lname) as empName1950s from employee where year(bdate) between 1950 and 1959;
++-----------------+
+| empName1950s    |
++-----------------+
+| Franklin T Wong |
++-----------------+
+
+mysql> select concat(fname,' ',mname,' ',lname) as empName1950s from employee where bdate like '195_______';
++-----------------+
+| empName1950s    |
++-----------------+
+| Franklin T Wong |
++-----------------+
+
+
+15. Show the resulting salaries if every employee working on the ‘ProductX’ project is given a 10 percent raise.
+
+mysql> select concat(fname,' ',mname,' ',lname) as empNmae, 1.1*salary as Incre_salary from employee,works_on,project where ssn=essn and pno=pnumber and pname='ProductX';
++-----------------+--------------+
+| empNmae         | Incre_salary |
++-----------------+--------------+
+| John B Smith    |    33000.000 |
+| Joyce A English |    27500.000 |
++-----------------+--------------+
+
+16. Retrieve all employees in department 5 whose salary is between $30,000 and $40,000. 
+
+mysql> select concat(fname,' ',mname,' ',lname) as empName from employee where salary>30000 and salary<40000;
++------------------+
+| empName          |
++------------------+
+| John B Smith     |
+| Franklin T Wong  |
+| Ramesh K Narayan |
++------------------+
+
+
+17.  Retrieve a list of employees and the projects they are working on, ordered by department and within each department, ordered alphabetically by last name, then first name.
+
+mysql> select concat(fname,' ',mname,' ',lname) as empName,pno from employee,works_on where ssn=essn order by dno,lname,fname;
++--------------------+-----+
+| empName            | pno |
++--------------------+-----+
+| James E Borg       |  20 |
+| Ahmad V Jabbar     |  10 |
+| Ahmad V Jabbar     |  30 |
+| Jennifer S Wallace |  20 |
+| Jennifer S Wallace |  30 |
+| Alicia J Zelaya    |  10 |
+| Alicia J Zelaya    |  30 |
+| Joyce A English    |   1 |
+| Joyce A English    |   2 |
+| Ramesh K Narayan   |   3 |
+| John B Smith       |   1 |
+| John B Smith       |   2 |
+| Franklin T Wong    |   2 |
+| Franklin T Wong    |   3 |
+| Franklin T Wong    |  10 |
+| Franklin T Wong    |  20 |
++--------------------+-----+
+
+18. Retrieve the name of all employees who do not have supervisors.
+
+Query : mysql> select concat(fname,' ',mname,' ',lname) as empNameNoSuper from employee where super_ssn is null;
++----------------+
+| empNameNoSuper |
++----------------+
+| James E Borg   |
++----------------+
+
+ 
+ 19. Retrieve the name of each employee who has a dependent with the same first name and is the same sex as the employee.
+ 
+ mysql> select concat(fname,' ',mname,' ',lname) as empName from employee e,dependent d where essn=ssn and dependent_name = fname and e.sex = d.sex;
+Empty set 
+ 
+
+ 21. Retrieve the names of employee who have no dependents. 
+ 
+ mysql> select concat(fname,' ',mname,' ',lname) as empName from employee  where ssn not in ( select essn from dependent);
++------------------+
+| empName          |
++------------------+
+| Joyce A English  |
+| Ramesh K Narayan |
+| James E Borg     |
+| Ahmad V Jabbar   |
+| Alicia J Zelaya  |
++------------------+
+
+
+ 22.  List the name of managers who have at least one dependent.
+ 
+mysql> select concat(fname,' ',mname,' ',lname) as mgrName from employee where ssn in (select mgr_ssn from department where mgr_ssn in(select essn from dependent));
++--------------------+
+| mgrName            |
++--------------------+
+| Franklin T Wong    |
+| Jennifer S Wallace |
++--------------------+
+
+
+ 23. Retrieve the Social Security numbers of all employee who work on project numbers 1, 2, or 3.
+ 
+ mysql> select distinct essn from works_on where pno=1 or pno=2 or pno=3 ;
++-----------+
+| essn      |
++-----------+
+| 123456789 |
+| 453453453 |
+| 333445555 |
+| 666884444 |
++-----------+
+
+mysql> select distinct essn from works_on where pno in(1,2,3);
++-----------+
+| essn      |
++-----------+
+| 123456789 |
+| 453453453 |
+| 333445555 |
+| 666884444 |
++-----------+
+
+ 
+ 24. Find the sum of the salaries of all employees, the maximum salary, the minimum salary, and the average salary
+ 
+mysql> select sum(salary),max(salary),min(salary),avg(salary) from employee;
++-------------+-------------+-------------+--------------+
+| sum(salary) | max(salary) | min(salary) | avg(salary)  |
++-------------+-------------+-------------+--------------+
+|   281000.00 |    55000.00 |    25000.00 | 35125.000000 |
++-------------+-------------+-------------+--------------+
+
+ 25. Find the sum of the salaries of all employees of the ‘Research’ department, as well as the maximum salary, the minimum salary, and the average salary in this department
+ 
+mysql> select sum(salary),max(salary),min(salary),avg(salary) from employee where dno= (select dnumber from department where dname='Research');
++-------------+-------------+-------------+--------------+
+| sum(salary) | max(salary) | min(salary) | avg(salary)  |
++-------------+-------------+-------------+--------------+
+|   133000.00 |    40000.00 |    25000.00 | 33250.000000 |
++-------------+-------------+-------------+--------------+
+
+ 
+ 26. Retrieve the total number of employees in the company.
+ 
+ mysql> select count(*) as noEmp from employee;
++-------+
+| noEmp |
++-------+
+|     8 |
++-------+
+
+ 
+ 27. Retrieve the total number of employees in the company and the number of employees in the ‘Research’ department.
+ 
+mysql> select t1.Total, t2.Research from (select count(*) as Total from employee) as t1, (select count(*) as Research from employee where dno in (select dnumber from department where dname='Research')) as t2;
++-------+----------+
+| Total | Research |
++-------+----------+
+|     8 |        4 |
++-------+----------+
+
+
+29. For each department, retrieve the department number, the number of employees in the department, and their average salary.
+ 
+ mysql> select dno,count(*),avg(salary) from employee group by dno;
++-----+----------+--------------+
+| dno | count(*) | avg(salary)  |
++-----+----------+--------------+
+|   1 |        1 | 55000.000000 |
+|   4 |        3 | 31000.000000 |
+|   5 |        4 | 33250.000000 |
++-----+----------+--------------+
+
+ 30. For each project, retrieve the project number, the project name, and the number of employees who work on that project.
+ 
+ mysql> select pnumber,pname, count(*) from project p,works_on w where p.pnumber=w.pno group by w.pno;
++---------+-----------------+----------+
+| pnumber | pname           | count(*) |
++---------+-----------------+----------+
+|      10 | Computarization |        3 |
+|      30 | Newbenefits     |        3 |
+|       1 | ProductX        |        2 |
+|       2 | ProductY        |        3 |
+|       3 | ProductZ        |        2 |
+|      20 | Reorganization  |        3 |
++---------+-----------------+----------+
+
+ 
+ 31. For each project on which more than two employees work, retrieve the project number, the project name, and the number of employees who work on the project.
+ 
+mysql> select p.pnumber,pname, count(*) from project p,works_on w where p.pnumber=w.pno group by w.pno having count(w.pno)>2;
++---------+-----------------+----------+
+| pnumber | pname           | count(*) |
++---------+-----------------+----------+
+|      10 | Computarization |        3 |
+|      30 | Newbenefits     |        3 |
+|       2 | ProductY        |        3 |
+|      20 | Reorganization  |        3 |
++---------+-----------------+----------+
+
+
+ 32. For each project, retrieve the project number, the project name, and the number of employees from department 5 who work on the project.
+ 
+ mysql> select pnumber,pname, count(*) from project p,works_on w where p.pnumber=w.pno and dnum=5 group by w.pno;
++---------+----------+----------+
+| pnumber | pname    | count(*) |
++---------+----------+----------+
+|       1 | ProductX |        2 |
+|       2 | ProductY |        3 |
+|       3 | ProductZ |        2 |
++---------+----------+----------+
+
+
+ 33. For each department that has more than five employees, retrieve the department number and the number of its employees who are making more than $40,000.
+
+
+
+select dno,count(*) from employee where dno in (select dno from employee group by dno having count(*)>5) and salary>40000 group by dno;
+Empty set
+
+
+
+
+
+

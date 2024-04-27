@@ -1,0 +1,22 @@
+how does crocss prpduct work among the two instances of the same table ?
+
+
+
+
+ select * from sailer where sid in(select sid from reserves where bid in(select bid from boats where color="Red")) and sid in(select sid from reserves where bid in(select bid from boats where color="Green));
+
+
+
+
+
+
+
+
+
+
+ select  * from sailer s  (Left Outer join reserves r on s.sid=r.sid) Minus (Right Outer join reserves r on s.sid=r.sid);
+
+
+
+
+

@@ -1,0 +1,82 @@
+1. Sales DB
+
+1. Count the no. of each product sales by salesperson with name "ramana'.
+
+Query : select PID, count(*) from Sales where SID in (select SID from Salesperson where Sname='ramana') group by PID;
+
+---------------------------------------------------------------------------------------------------------------------
+2. Find th no. of product which are not listed in slaes relation.
+
+Query : select count( PID) from Product where PID not in ( select PID from Sales );
+--------------------------------------------------------------------------------------------------------------
+3. Find the name and age of the salespersons who have done sales of all different products.
+
+Query : select Sname,Age from Salesperson where SID in ( select SID from Sales group by SID having count(distinct PID)=(select count(*) from Product));
+-------------------------------------------------------------------------------------------------------------
+4. Display the product details which are better in rating than product named "yippie" in category "noodles".
+
+Query : select * from Product where Rating>(select Rating from Product where Pname='yippie') and Category='noodles';
+---------------------------------------------------------------------------------------------------------------
+5. Find the name of sales person who have done sales of both product "Maggie" and "Good day".
+
+Query : select Sname from Salesperson where SID in ( select SID from Sales where PID in ( select PID from Product where Pname='maggie')) and SID in ( select SID from Sales where PID in ( select PID from Product where Pname='Good day'));
+-----------------------------------------------------------------------------------------------------------------
+
+2. Player DB
+
+1. Find the player name who are listed for all formats in Rankings table.
+
+Query : select pname from Rankings group by pname having count(distinct fname)=(select count(*) from Format);
+------------------------------------------------------------------------------------------------------------
+2. Display the name and category of player who has highest rank for each format/
+
+Query : select pname,category from Player where pname in(select pname from Rankings where Ranking  in(select min(ranking) from Rankings group by fname));
+
+mysql> select pname,category from player where pname in(select pname from rankings where ranks in(select max(ranks) from rankings group by fname));
++--------+----------+
+| pname  | category |
++--------+----------+
+| Ashwin | Bowler   |
+| Kohli  | Batsman  |
++--------+----------+
+2 rows in set (0.02 sec)    
+
+
+-----------------------------------------------------------------------------------------------------------
+3. Find the player names who are listed in rankings table only for "ODI" format but not for "Test" format.
+
+Query : select pname from Player where pname in ( select pname from Rankings where fname='ODI') and pname not in ( select pname from Rankings where fname='Test');
+-------------------------------------------------------------------------------------------------------
+4. Add an attribute age to players table and put age of player named "Kohli" to 27.
+
+Query 1 : alter table Player add column Age int;
+Query 2 : update Player set Age=27 where pname='Kohli';
+-----------------------------------------------------------------------------------------------------------
+5. Count the no. of players in each country.
+
+Query : select country,count(*) from Player group by country;
+---------------------------------------------------------------------------------------------------------------
+
+3. Faculty DB
+
+1. Find faculty names whose qualification is "M.Tech" and teaches at least two different courses.
+
+Query : select fname from Faculty where qualification='M.Tech' and fid in ( select fid from Teaches group by fid having count(cid)>=2);
+----------------------------------------------------------------------------------------------------------------------
+2. Find faculty names whose age is below 30 and teaches all the courses.
+
+Query : select fname from Faculty where Age<30 and fid in (select fid from Teaches group by fid having count(cid)=(select count(*) from Course));
+---------------------------------------------------------------------------------------------------------------------
+3. Find course name and textbooks of the courses taught by either "kavitha" or "venu".
+
+Query : select cname,textbook from Course where cid in (select cid from Teaches where fid in (select fid from Faculty where fname='kavitha' or fname='venu'));
+------------------------------------------------------------------------------------------------------------------
+4. Count the no. of courses "year-sem".
+
+Query : select year_sem,count(distinct cid) from Teaches group by year_sem;
+-----------------------------------------------------------------------------------------------------------------
+5. Alter the table courses to add a new attribute "credits" and update the credits to 4 for the courses taught by faculty with fid 10.
+
+Query 1: alter table Course add column credits int;
+Query 2: update Course set credits=4 where cid in (select cid from Teaches where fid in (select fid from Faculty where fid=10));
+---------------------------------------------------------------------------------------------------------------------------------

@@ -1,0 +1,708 @@
+<pre><font color="#26A269"><b>user@mr-koduri</b></font>:<font color="#12488B"><b>~</b></font>$ mysql -u root -p;
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 8.0.34-0ubuntu0.22.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2023, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type &apos;help;&apos; or &apos;\h&apos; for help. Type &apos;\c&apos; to clear the current input statement.
+
+mysql&gt; show databases;
++--------------------+
+| Database           |
++--------------------+
+| collage            |
+| information_schema |
+| mysql              |
+| performance_schema |
+| practice           |
+| student            |
+| sys                |
++--------------------+
+7 rows in set (0.00 sec)
+
+mysql&gt; create database week2;
+Query OK, 1 row affected (0.00 sec)
+
+mysql&gt; use week2;
+Database changed
+mysql&gt; create table student_info(slno int, sid char(10),name varchar(30),marks int, grade char);
+Query OK, 0 rows affected (0.02 sec)
+
+mysql&gt; select * from student_info;
+Empty set (0.00 sec)
+
+mysql&gt; desc student_info;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| slno  | int         | YES  |     | NULL    |       |
+| sid   | char(10)    | YES  |     | NULL    |       |
+| name  | varchar(30) | YES  |     | NULL    |       |
+| marks | int         | YES  |     | NULL    |       |
+| grade | char(1)     | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql&gt; insert into student_info values(1,&quot;B200402&quot;,&quot;vinay&quot;,99,&apos;X&apos;);
+Query OK, 1 row affected (0.00 sec)
+
+mysql&gt; insert into student_info values(2,&quot;B200033&quot;,&apos;jayraj&apos;,100,&apos;X&apos;);
+Query OK, 1 row affected (0.00 sec)
+
+mysql&gt; select * from student_info;
++------+---------+--------+-------+-------+
+| slno | sid     | name   | marks | grade |
++------+---------+--------+-------+-------+
+|    1 | B200402 | vinay  |    99 | X     |
+|    2 | B200033 | jayraj |   100 | X     |
++------+---------+--------+-------+-------+
+2 rows in set (0.00 sec)
+
+mysql&gt; insert into student_info values(2,&quot;B200300&quot;,&apos;ssvp&apos;,75,&apos;B&apos;);
+Query OK, 1 row affected (0.00 sec)
+
+mysql&gt; insert into student_info values(4,&quot;B200001&quot;,&apos;sai&apos;,50,&apos;D&apos;)&apos;
+    &apos;&gt; (5,&quot;sweatha&quot;,80,&apos;A&apos;);
+    &apos;&gt; ;
+    &apos;&gt; &apos;;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near &apos;&apos;
+(5,&quot;sweatha&quot;,80,&apos;A&apos;);
+;
+&apos;&apos; at line 1
+mysql&gt; select * from student_info;
++------+---------+--------+-------+-------+
+| slno | sid     | name   | marks | grade |
++------+---------+--------+-------+-------+
+|    1 | B200402 | vinay  |    99 | X     |
+|    2 | B200033 | jayraj |   100 | X     |
+|    2 | B200300 | ssvp   |    75 | B     |
++------+---------+--------+-------+-------+
+3 rows in set (0.00 sec)
+
+mysql&gt; update student_info set slno=3 where name=&apos;ssvp&apos;;
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql&gt; select * from student_info;
++------+---------+--------+-------+-------+
+| slno | sid     | name   | marks | grade |
++------+---------+--------+-------+-------+
+|    1 | B200402 | vinay  |    99 | X     |
+|    2 | B200033 | jayraj |   100 | X     |
+|    3 | B200300 | ssvp   |    75 | B     |
++------+---------+--------+-------+-------+
+3 rows in set (0.00 sec)
+
+mysql&gt; insert into student_info values(4,&quot;B200001&quot;,&apos;sai&apos;,50,&apos;D&apos;);
+Query OK, 1 row affected (0.00 sec)
+
+mysql&gt; insert into student_info values(5,&quot;B200002&quot;,&apos;swetha&apos;,80,&apos;A&apos;),
+    -&gt; (6,&quot;B200999&quot;,&apos;megha&apos;,30,&apos;R&apos;),
+    -&gt; (7,&quot;B200888&quot;,&apos;vijay&apos;,66,&apos;C&apos;);
+Query OK, 3 rows affected (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql&gt; select * from student_info;
++------+---------+--------+-------+-------+
+| slno | sid     | name   | marks | grade |
++------+---------+--------+-------+-------+
+|    1 | B200402 | vinay  |    99 | X     |
+|    2 | B200033 | jayraj |   100 | X     |
+|    3 | B200300 | ssvp   |    75 | B     |
+|    4 | B200001 | sai    |    50 | D     |
+|    5 | B200002 | swetha |    80 | A     |
+|    6 | B200999 | megha  |    30 | R     |
+|    7 | B200888 | vijay  |    66 | C     |
++------+---------+--------+-------+-------+
+7 rows in set (0.00 sec)
+
+mysql&gt; create view vw_student_info as select sid,name,marks,grade,slno from student_info;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql&gt; select * from student_info;
++------+---------+--------+-------+-------+
+| slno | sid     | name   | marks | grade |
++------+---------+--------+-------+-------+
+|    1 | B200402 | vinay  |    99 | X     |
+|    2 | B200033 | jayraj |   100 | X     |
+|    3 | B200300 | ssvp   |    75 | B     |
+|    4 | B200001 | sai    |    50 | D     |
+|    5 | B200002 | swetha |    80 | A     |
+|    6 | B200999 | megha  |    30 | R     |
+|    7 | B200888 | vijay  |    66 | C     |
++------+---------+--------+-------+-------+
+7 rows in set (0.00 sec)
+
+mysql&gt; select * from vw_student_info;
++---------+--------+-------+-------+------+
+| sid     | name   | marks | grade | slno |
++---------+--------+-------+-------+------+
+| B200402 | vinay  |    99 | X     |    1 |
+| B200033 | jayraj |   100 | X     |    2 |
+| B200300 | ssvp   |    75 | B     |    3 |
+| B200001 | sai    |    50 | D     |    4 |
+| B200002 | swetha |    80 | A     |    5 |
+| B200999 | megha  |    30 | R     |    6 |
+| B200888 | vijay  |    66 | C     |    7 |
++---------+--------+-------+-------+------+
+7 rows in set (0.00 sec)
+
+mysql&gt; create table student_info1 as select from sid,name,slno,marks,grade from student_info;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near &apos;from sid,name,slno,marks,grade from student_info&apos; at line 1
+mysql&gt; create table student_info1 as sid,name,slno,marks,grade from student_info;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near &apos;sid,name,slno,marks,grade from student_info&apos; at line 1
+mysql&gt; create table student_info1 as select sid,name,slno,marks,grade from student_info;
+Query OK, 7 rows affected (0.01 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+mysql&gt; insert into student_info value(8,&quot;B20&quot;,&quot;xyz&quot;,0,&apos;f&apos;);
+Query OK, 1 row affected (0.00 sec)
+
+mysql&gt; select * from student_info;
++------+---------+--------+-------+-------+
+| slno | sid     | name   | marks | grade |
++------+---------+--------+-------+-------+
+|    1 | B200402 | vinay  |    99 | X     |
+|    2 | B200033 | jayraj |   100 | X     |
+|    3 | B200300 | ssvp   |    75 | B     |
+|    4 | B200001 | sai    |    50 | D     |
+|    5 | B200002 | swetha |    80 | A     |
+|    6 | B200999 | megha  |    30 | R     |
+|    7 | B200888 | vijay  |    66 | C     |
+|    8 | B20     | xyz    |     0 | f     |
++------+---------+--------+-------+-------+
+8 rows in set (0.00 sec)
+
+mysql&gt; delete from student_info where name=&apos;xyz&apos;;
+Query OK, 1 row affected (0.00 sec)
+
+mysql&gt; select * from student_info;
++------+---------+--------+-------+-------+
+| slno | sid     | name   | marks | grade |
++------+---------+--------+-------+-------+
+|    1 | B200402 | vinay  |    99 | X     |
+|    2 | B200033 | jayraj |   100 | X     |
+|    3 | B200300 | ssvp   |    75 | B     |
+|    4 | B200001 | sai    |    50 | D     |
+|    5 | B200002 | swetha |    80 | A     |
+|    6 | B200999 | megha  |    30 | R     |
+|    7 | B200888 | vijay  |    66 | C     |
++------+---------+--------+-------+-------+
+7 rows in set (0.00 sec)
+
+mysql&gt; Alter table student_info
+    -&gt; add column remarks varchar;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near &apos;&apos; at line 2
+mysql&gt; Alter table student_info add column remarks varchar(12);
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql&gt; select * frpm student info;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near &apos;frpm student info&apos; at line 1
+mysql&gt; select * frpm student_info;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near &apos;frpm student_info&apos; at line 1
+mysql&gt; select * from student_info;
++------+---------+--------+-------+-------+---------+
+| slno | sid     | name   | marks | grade | remarks |
++------+---------+--------+-------+-------+---------+
+|    1 | B200402 | vinay  |    99 | X     | NULL    |
+|    2 | B200033 | jayraj |   100 | X     | NULL    |
+|    3 | B200300 | ssvp   |    75 | B     | NULL    |
+|    4 | B200001 | sai    |    50 | D     | NULL    |
+|    5 | B200002 | swetha |    80 | A     | NULL    |
+|    6 | B200999 | megha  |    30 | R     | NULL    |
+|    7 | B200888 | vijay  |    66 | C     | NULL    |
++------+---------+--------+-------+-------+---------+
+7 rows in set (0.00 sec)
+
+mysql&gt; alter table student info
+    -&gt; drop remarks;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near &apos;info
+drop remarks&apos; at line 1
+mysql&gt; alter table student info drop column remarks;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near &apos;info drop column remarks&apos; at line 1
+mysql&gt; alter table student_infodrop column remarks;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near &apos;column remarks&apos; at line 1
+mysql&gt; alter table student_info drop column remarks;
+Query OK, 0 rows affected (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql&gt; Alter table student_info add column remarks varchar(12);
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql&gt; select * from student_info;
++------+---------+--------+-------+-------+---------+
+| slno | sid     | name   | marks | grade | remarks |
++------+---------+--------+-------+-------+---------+
+|    1 | B200402 | vinay  |    99 | X     | NULL    |
+|    2 | B200033 | jayraj |   100 | X     | NULL    |
+|    3 | B200300 | ssvp   |    75 | B     | NULL    |
+|    4 | B200001 | sai    |    50 | D     | NULL    |
+|    5 | B200002 | swetha |    80 | A     | NULL    |
+|    6 | B200999 | megha  |    30 | R     | NULL    |
+|    7 | B200888 | vijay  |    66 | C     | NULL    |
++------+---------+--------+-------+-------+---------+
+7 rows in set (0.00 sec)
+
+mysql&gt; alter table student_info drop remarks;
+Query OK, 0 rows affected (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql&gt; select * from student_info;
++------+---------+--------+-------+-------+
+| slno | sid     | name   | marks | grade |
++------+---------+--------+-------+-------+
+|    1 | B200402 | vinay  |    99 | X     |
+|    2 | B200033 | jayraj |   100 | X     |
+|    3 | B200300 | ssvp   |    75 | B     |
+|    4 | B200001 | sai    |    50 | D     |
+|    5 | B200002 | swetha |    80 | A     |
+|    6 | B200999 | megha  |    30 | R     |
+|    7 | B200888 | vijay  |    66 | C     |
++------+---------+--------+-------+-------+
+7 rows in set (0.00 sec)
+
+mysql&gt; select * from student info where (slno%2)=0;
+ERROR 1146 (42S02): Table &apos;week2.student&apos; doesn&apos;t exist
+mysql&gt; select * from student_info where (slno%2)=0;
++------+---------+--------+-------+-------+
+| slno | sid     | name   | marks | grade |
++------+---------+--------+-------+-------+
+|    2 | B200033 | jayraj |   100 | X     |
+|    4 | B200001 | sai    |    50 | D     |
+|    6 | B200999 | megha  |    30 | R     |
++------+---------+--------+-------+-------+
+3 rows in set (0.00 sec)
+
+mysql&gt; select marks from student_info where (slno%2)=0;
++-------+
+| marks |
++-------+
+|   100 |
+|    50 |
+|    30 |
++-------+
+3 rows in set (0.00 sec)
+
+mysql&gt; select * from student_info where (marks%2)=0;
++------+---------+--------+-------+-------+
+| slno | sid     | name   | marks | grade |
++------+---------+--------+-------+-------+
+|    2 | B200033 | jayraj |   100 | X     |
+|    4 | B200001 | sai    |    50 | D     |
+|    5 | B200002 | swetha |    80 | A     |
+|    6 | B200999 | megha  |    30 | R     |
+|    7 | B200888 | vijay  |    66 | C     |
++------+---------+--------+-------+-------+
+5 rows in set (0.00 sec)
+
+mysql&gt; select count(name) from student_info;
++-------------+
+| count(name) |
++-------------+
+|           7 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql&gt; select sid from student_info order by;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near &apos;&apos; at line 1
+mysql&gt; select sid from student_info order by sid;
++---------+
+| sid     |
++---------+
+| B200001 |
+| B200002 |
+| B200033 |
+| B200300 |
+| B200402 |
+| B200888 |
+| B200999 |
++---------+
+7 rows in set (0.01 sec)
+
+mysql&gt; select marks from student_info order by sid;
++-------+
+| marks |
++-------+
+|    50 |
+|    80 |
+|   100 |
+|    75 |
+|    99 |
+|    66 |
+|    30 |
++-------+
+7 rows in set (0.00 sec)
+
+mysql&gt; select marks from student_info order by marks;
++-------+
+| marks |
++-------+
+|    30 |
+|    50 |
+|    66 |
+|    75 |
+|    80 |
+|    99 |
+|   100 |
++-------+
+7 rows in set (0.00 sec)
+
+mysql&gt; select * from student_info order by marks;
++------+---------+--------+-------+-------+
+| slno | sid     | name   | marks | grade |
++------+---------+--------+-------+-------+
+|    6 | B200999 | megha  |    30 | R     |
+|    4 | B200001 | sai    |    50 | D     |
+|    7 | B200888 | vijay  |    66 | C     |
+|    3 | B200300 | ssvp   |    75 | B     |
+|    5 | B200002 | swetha |    80 | A     |
+|    1 | B200402 | vinay  |    99 | X     |
+|    2 | B200033 | jayraj |   100 | X     |
++------+---------+--------+-------+-------+
+7 rows in set (0.00 sec)
+
+mysql&gt; select marks from student_info order by marks dsc;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near &apos;dsc&apos; at line 1
+mysql&gt; select marks from student_info order by marks desc;
++-------+
+| marks |
++-------+
+|   100 |
+|    99 |
+|    80 |
+|    75 |
+|    66 |
+|    50 |
+|    30 |
++-------+
+7 rows in set (0.00 sec)
+
+mysql&gt; select name,marks from student_info order by marks desc;
++--------+-------+
+| name   | marks |
++--------+-------+
+| jayraj |   100 |
+| vinay  |    99 |
+| swetha |    80 |
+| ssvp   |    75 |
+| vijay  |    66 |
+| sai    |    50 |
+| megha  |    30 |
++--------+-------+
+7 rows in set (0.00 sec)
+
+mysql&gt; select name,marks from student_info order by marks desc limit 2;
++--------+-------+
+| name   | marks |
++--------+-------+
+| jayraj |   100 |
+| vinay  |    99 |
++--------+-------+
+2 rows in set (0.00 sec)
+
+mysql&gt; select name,marks from student_info order by marks desc limit 20;
++--------+-------+
+| name   | marks |
++--------+-------+
+| jayraj |   100 |
+| vinay  |    99 |
+| swetha |    80 |
+| ssvp   |    75 |
+| vijay  |    66 |
+| sai    |    50 |
+| megha  |    30 |
++--------+-------+
+7 rows in set (0.00 sec)
+
+mysql&gt; desc student_info;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| slno  | int         | YES  |     | NULL    |       |
+| sid   | char(10)    | YES  |     | NULL    |       |
+| name  | varchar(30) | YES  |     | NULL    |       |
+| marks | int         | YES  |     | NULL    |       |
+| grade | char(1)     | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql&gt; insert into student_info value(8,&quot;qwertyuiopasdfghjklzxcvbnm&quot;,&apos;qwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjkasdfghjklzxcvbnm&apos;,123456789,&apos;Q&apos;);
+ERROR 1406 (22001): Data too long for column &apos;sid&apos; at row 1
+mysql&gt; insert into student_info value(8,&quot;qwm&quot;,&apos;qwertyuiopasdfghjklzxcvbnmqwertyuiopasdfghjkasdfghjklzxcvbnm&apos;,123456789,&apos;Q&apos;);
+ERROR 1406 (22001): Data too long for column &apos;name&apos; at row 1
+mysql&gt; insert into student_info value(8,&quot;qwm&quot;,&apos;qm&apos;,1123456723456789,&apos;Q&apos;);
+ERROR 1264 (22003): Out of range value for column &apos;marks&apos; at row 1
+mysql&gt; insert into student_info value(8,&quot;qwm&quot;,&apos;qm&apos;,9,&apos;ggQ&apos;);
+ERROR 1406 (22001): Data too long for column &apos;grade&apos; at row 1
+mysql&gt; insert into student_info value(8,&quot;qwm&quot;,&apos;qm&apos;,9,&apos;Q&apos;);
+Query OK, 1 row affected (0.01 sec)
+
+mysql&gt; select * from student_info;
++------+---------+--------+-------+-------+
+| slno | sid     | name   | marks | grade |
++------+---------+--------+-------+-------+
+|    1 | B200402 | vinay  |    99 | X     |
+|    2 | B200033 | jayraj |   100 | X     |
+|    3 | B200300 | ssvp   |    75 | B     |
+|    4 | B200001 | sai    |    50 | D     |
+|    5 | B200002 | swetha |    80 | A     |
+|    6 | B200999 | megha  |    30 | R     |
+|    7 | B200888 | vijay  |    66 | C     |
+|    8 | qwm     | qm     |     9 | Q     |
++------+---------+--------+-------+-------+
+8 rows in set (0.00 sec)
+
+mysql&gt; delete from student_info where marks=9;
+Query OK, 1 row affected (0.01 sec)
+
+mysql&gt; select * from student_info;
++------+---------+--------+-------+-------+
+| slno | sid     | name   | marks | grade |
++------+---------+--------+-------+-------+
+|    1 | B200402 | vinay  |    99 | X     |
+|    2 | B200033 | jayraj |   100 | X     |
+|    3 | B200300 | ssvp   |    75 | B     |
+|    4 | B200001 | sai    |    50 | D     |
+|    5 | B200002 | swetha |    80 | A     |
+|    6 | B200999 | megha  |    30 | R     |
+|    7 | B200888 | vijay  |    66 | C     |
++------+---------+--------+-------+-------+
+7 rows in set (0.00 sec)
+
+mysql&gt; insertinto student_info value(1,&quot;B200402&quot;,&apos;vinay&apos;,99,&apos;X&apos;);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near &apos;insertinto student_info value(1,&quot;B200402&quot;,&apos;vinay&apos;,99,&apos;X&apos;)&apos; at line 1
+mysql&gt; insert into student_info value(1,&quot;B200402&quot;,&apos;vinay&apos;,99,&apos;X&apos;);
+Query OK, 1 row affected (0.00 sec)
+
+mysql&gt; select * from student_info;
++------+---------+--------+-------+-------+
+| slno | sid     | name   | marks | grade |
++------+---------+--------+-------+-------+
+|    1 | B200402 | vinay  |    99 | X     |
+|    2 | B200033 | jayraj |   100 | X     |
+|    3 | B200300 | ssvp   |    75 | B     |
+|    4 | B200001 | sai    |    50 | D     |
+|    5 | B200002 | swetha |    80 | A     |
+|    6 | B200999 | megha  |    30 | R     |
+|    7 | B200888 | vijay  |    66 | C     |
+|    1 | B200402 | vinay  |    99 | X     |
++------+---------+--------+-------+-------+
+8 rows in set (0.00 sec)
+
+mysql&gt; delete from student_info where slno=1;
+Query OK, 2 rows affected (0.00 sec)
+
+mysql&gt; select * from student_info;
++------+---------+--------+-------+-------+
+| slno | sid     | name   | marks | grade |
++------+---------+--------+-------+-------+
+|    2 | B200033 | jayraj |   100 | X     |
+|    3 | B200300 | ssvp   |    75 | B     |
+|    4 | B200001 | sai    |    50 | D     |
+|    5 | B200002 | swetha |    80 | A     |
+|    6 | B200999 | megha  |    30 | R     |
+|    7 | B200888 | vijay  |    66 | C     |
++------+---------+--------+-------+-------+
+6 rows in set (0.00 sec)
+
+mysql&gt; insert into student_info value(1,&quot;B200402&quot;,&quot;vinay&quot;,99,&apos;X&apos;);
+Query OK, 1 row affected (0.00 sec)
+
+mysql&gt; select * from student_info;
++------+---------+--------+-------+-------+
+| slno | sid     | name   | marks | grade |
++------+---------+--------+-------+-------+
+|    2 | B200033 | jayraj |   100 | X     |
+|    3 | B200300 | ssvp   |    75 | B     |
+|    4 | B200001 | sai    |    50 | D     |
+|    5 | B200002 | swetha |    80 | A     |
+|    6 | B200999 | megha  |    30 | R     |
+|    7 | B200888 | vijay  |    66 | C     |
+|    1 | B200402 | vinay  |    99 | X     |
++------+---------+--------+-------+-------+
+7 rows in set (0.00 sec)
+
+mysql&gt; create view new_view as select slno,sid,name,marks,grade from student_info order by slno;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql&gt; select * from new_view;
++------+---------+--------+-------+-------+
+| slno | sid     | name   | marks | grade |
++------+---------+--------+-------+-------+
+|    1 | B200402 | vinay  |    99 | X     |
+|    2 | B200033 | jayraj |   100 | X     |
+|    3 | B200300 | ssvp   |    75 | B     |
+|    4 | B200001 | sai    |    50 | D     |
+|    5 | B200002 | swetha |    80 | A     |
+|    6 | B200999 | megha  |    30 | R     |
+|    7 | B200888 | vijay  |    66 | C     |
++------+---------+--------+-------+-------+
+7 rows in set (0.00 sec)
+
+mysql&gt; create table student_info1 as select slno,sid,name,marks,grade from new_view;
+ERROR 1050 (42S01): Table &apos;student_info1&apos; already exists
+mysql&gt; create table student_info2 as select slno,sid,name,marks,grade from new_view;
+Query OK, 7 rows affected (0.02 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+mysql&gt; select * from student_info2;
++------+---------+--------+-------+-------+
+| slno | sid     | name   | marks | grade |
++------+---------+--------+-------+-------+
+|    2 | B200033 | jayraj |   100 | X     |
+|    3 | B200300 | ssvp   |    75 | B     |
+|    4 | B200001 | sai    |    50 | D     |
+|    5 | B200002 | swetha |    80 | A     |
+|    6 | B200999 | megha  |    30 | R     |
+|    7 | B200888 | vijay  |    66 | C     |
+|    1 | B200402 | vinay  |    99 | X     |
++------+---------+--------+-------+-------+
+7 rows in set (0.00 sec)
+
+mysql&gt; select * from new_view;
++------+---------+--------+-------+-------+
+| slno | sid     | name   | marks | grade |
++------+---------+--------+-------+-------+
+|    1 | B200402 | vinay  |    99 | X     |
+|    2 | B200033 | jayraj |   100 | X     |
+|    3 | B200300 | ssvp   |    75 | B     |
+|    4 | B200001 | sai    |    50 | D     |
+|    5 | B200002 | swetha |    80 | A     |
+|    6 | B200999 | megha  |    30 | R     |
+|    7 | B200888 | vijay  |    66 | C     |
++------+---------+--------+-------+-------+
+7 rows in set (0.01 sec)
+
+mysql&gt; drop table student_info2;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql&gt; CREATE TABLE student_info2 as select slno,sid,name,marks,grade from new_view;
+Query OK, 7 rows affected (0.01 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+mysql&gt; select * from student_info2;
++------+---------+--------+-------+-------+
+| slno | sid     | name   | marks | grade |
++------+---------+--------+-------+-------+
+|    2 | B200033 | jayraj |   100 | X     |
+|    3 | B200300 | ssvp   |    75 | B     |
+|    4 | B200001 | sai    |    50 | D     |
+|    5 | B200002 | swetha |    80 | A     |
+|    6 | B200999 | megha  |    30 | R     |
+|    7 | B200888 | vijay  |    66 | C     |
+|    1 | B200402 | vinay  |    99 | X     |
++------+---------+--------+-------+-------+
+7 rows in set (0.00 sec)
+
+mysql&gt; CREATE TABLE student_info2 as select slno,sid,name,marks,grade from new_view order by slno;
+ERROR 1050 (42S01): Table &apos;student_info2&apos; already exists
+mysql&gt; drop student_info2;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near &apos;student_info2&apos; at line 1
+mysql&gt; drop table student_info2;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql&gt; CREATE TABLE student_info2 as select slno,sid,name,marks,grade from new_view order by slno;
+Query OK, 7 rows affected (0.01 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+mysql&gt; select * from student_info2;
++------+---------+--------+-------+-------+
+| slno | sid     | name   | marks | grade |
++------+---------+--------+-------+-------+
+|    1 | B200402 | vinay  |    99 | X     |
+|    2 | B200033 | jayraj |   100 | X     |
+|    3 | B200300 | ssvp   |    75 | B     |
+|    4 | B200001 | sai    |    50 | D     |
+|    5 | B200002 | swetha |    80 | A     |
+|    6 | B200999 | megha  |    30 | R     |
+|    7 | B200888 | vijay  |    66 | C     |
++------+---------+--------+-------+-------+
+7 rows in set (0.00 sec)
+
+mysql&gt; select * from student_info1;
++---------+--------+------+-------+-------+
+| sid     | name   | slno | marks | grade |
++---------+--------+------+-------+-------+
+| B200402 | vinay  |    1 |    99 | X     |
+| B200033 | jayraj |    2 |   100 | X     |
+| B200300 | ssvp   |    3 |    75 | B     |
+| B200001 | sai    |    4 |    50 | D     |
+| B200002 | swetha |    5 |    80 | A     |
+| B200999 | megha  |    6 |    30 | R     |
+| B200888 | vijay  |    7 |    66 | C     |
++---------+--------+------+-------+-------+
+7 rows in set (0.00 sec)
+
+mysql&gt; select * from student_info;
++------+---------+--------+-------+-------+
+| slno | sid     | name   | marks | grade |
++------+---------+--------+-------+-------+
+|    2 | B200033 | jayraj |   100 | X     |
+|    3 | B200300 | ssvp   |    75 | B     |
+|    4 | B200001 | sai    |    50 | D     |
+|    5 | B200002 | swetha |    80 | A     |
+|    6 | B200999 | megha  |    30 | R     |
+|    7 | B200888 | vijay  |    66 | C     |
+|    1 | B200402 | vinay  |    99 | X     |
++------+---------+--------+-------+-------+
+7 rows in set (0.00 sec)
+
+mysql&gt; srop table student_info;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near &apos;srop table student_info&apos; at line 1
+mysql&gt; drop table student_info;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql&gt; CREATE TABLE student_info as select slno,sid,name,marks,grade from student_info2;
+Query OK, 7 rows affected (0.02 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+mysql&gt; select * from student_info;
++------+---------+--------+-------+-------+
+| slno | sid     | name   | marks | grade |
++------+---------+--------+-------+-------+
+|    1 | B200402 | vinay  |    99 | X     |
+|    2 | B200033 | jayraj |   100 | X     |
+|    3 | B200300 | ssvp   |    75 | B     |
+|    4 | B200001 | sai    |    50 | D     |
+|    5 | B200002 | swetha |    80 | A     |
+|    6 | B200999 | megha  |    30 | R     |
+|    7 | B200888 | vijay  |    66 | C     |
++------+---------+--------+-------+-------+
+7 rows in set (0.00 sec)
+
+mysql&gt; select * from student_info where name like=&quot;%s%&quot;;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near &apos;=&quot;%s%&quot;&apos; at line 1
+mysql&gt; select * from student_info where name like &quot;%s%&quot;;
++------+---------+--------+-------+-------+
+| slno | sid     | name   | marks | grade |
++------+---------+--------+-------+-------+
+|    3 | B200300 | ssvp   |    75 | B     |
+|    4 | B200001 | sai    |    50 | D     |
+|    5 | B200002 | swetha |    80 | A     |
++------+---------+--------+-------+-------+
+3 rows in set (0.00 sec)
+
+mysql&gt; select * from student_info where name like &quot;s%&quot;;
++------+---------+--------+-------+-------+
+| slno | sid     | name   | marks | grade |
++------+---------+--------+-------+-------+
+|    3 | B200300 | ssvp   |    75 | B     |
+|    4 | B200001 | sai    |    50 | D     |
+|    5 | B200002 | swetha |    80 | A     |
++------+---------+--------+-------+-------+
+3 rows in set (0.00 sec)
+
+mysql&gt; select * from student_info where name like &quot;%s&quot;;
+Empty set (0.00 sec)
+
+mysql&gt; 
+
+</pre>

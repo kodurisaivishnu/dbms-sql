@@ -1,0 +1,74 @@
+create database SailorsExt;
+
+use SailorsExt;
+
+create table Sailor
+( sid char(4) primary key,
+sname varchar(8),
+ age int,
+rating int);
+
+insert into Sailor value('s101','John',25,8);
+insert into Sailor value('s102','Jane',28,9);
+insert into Sailor value('s103','Michael',22,6);
+insert into Sailor value('s104','Emily',31,3);
+insert into Sailor value('s105','David',29,4);
+
+
+select * from Sailor;
+
+create table Boats 
+(bid char(4) primary key,
+bname varchar(9) unique,
+color varchar(6));
+
+
+insert into Boats values('b201','Sea Queen','Blue');
+insert into Boats values('b202','Windstar','White');
+insert into Boats values('b203','Sea Rider','Red');
+insert into Boats values('b204','Oceanic','Green');
+insert into Boats values('b205','Sun Sail','Yellow');
+insert into Boats values('b206','Moon Lite','Blue');
+
+select * from Boats;
+
+create table Marinas
+(mid char(4) primary key,
+mname varchar(11) unique,
+location varchar(7));
+
+
+insert into Marinas values('m301','Bay Harbor','Coastal');
+insert into Marinas values('m302','Lakeview','Inland');
+insert into Marinas values('m304','Cove Haven','Inland');
+insert into Marinas values('m303','Port Breeze','Coastal');
+insert into Marinas values('m305','Sunset Bay','Coastal');
+
+select * from Marinas;
+
+
+create table Reserves  (
+rid char(4) primary key, 
+sid char(4), 
+bid char(4), 
+mid char(4), 
+Day date, 
+foreign key (sid) references Sailor(sid), 
+foreign key(bid) references Boats(bid), 
+foreign key (mid) references Marinas(mid));
+
+
+insert into Reserves values('r401','s101','b201','m301','2023-08-20');
+insert into Reserves values('r402','s102','b202','m302','2023-08-22');
+insert into Reserves values('r403','s103','b203','m303','2023-08-23');
+insert into Reserves values('r404','s104','b204','m304','2023-08-21');
+insert into Reserves values('r405','s105','b205','m305','2023-08-24');
+insert into Reserves values('r406','s101','b203','m304','2023-08-28');
+
+select * from Reserves;
+
+
+
+
+
+
